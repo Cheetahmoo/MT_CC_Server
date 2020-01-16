@@ -1,0 +1,11 @@
+# How long Winter last in minutes (deafault is 12 hours of gameplay)
+season_winter_days(Winter Days) int 360
+
+# How long Winter last in minutes (deafault is 12 hours of gameplay)
+season_spring_days(Spring Days) int 360
+
+# How long Winter last in minutes (deafault is 12 hours of gameplay)
+season_summer_days(Summer Days) int 360
+
+# How long Winter last in minutes (deafault is 12 hours of gameplay)
+season_fall_days(Fall Days) int 360
