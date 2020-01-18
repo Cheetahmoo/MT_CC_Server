@@ -23,42 +23,33 @@ local acaciaSpring = {"default_acacia_leaves.png","default_leaves_simple.png"}
 local acaciaFall = {"acacia_leaves_fall.png","acacia_leaves_fall_simple.png"}
 local acacia_leaves = acaciaDefault
 
---[[dirt_with_grass]]--
+--[[dirt_with_]]--
 local grassWinter = {"default_snow.png", "default_dirt.png",{name = "default_dirt.png^default_snow_side.png",tileable_vertical = false}}
 local grassSpring = {"seasons_grass_spring.png", "default_dirt.png",{name = "default_dirt.png^seasons_grass_side_spring.png",tileable_vertical = false}}
 local grassFall = {"seasons_grass_fall.png", "default_dirt.png",{name = "default_dirt.png^seasons_grass_side_fall.png",tileable_vertical = false}}
 local grassDefault = {"default_grass.png", "default_dirt.png",{name = "default_dirt.png^default_grass_side.png",tileable_vertical = false}}
-local grass = grassDefault
-
---[[dirt_with_grass]]--
-local dirt_with_snowNotWinter = {"default_grass.png", "default_dirt.png",{name = "default_dirt.png^default_grass_side.png",tileable_vertical = false}}
-local dirt_with_snowDefault = {"default_snow.png", "default_dirt.png",{name = "default_dirt.png^default_snow_side.png",tileable_vertical = false}}
-local dirt_with_snow = dirt_with_snowDefault
+local seaosnsGrass = grassDefault
 
 if(seasons.season == "winter") then
 	jungleLeaves = jungleWinter
 	acacia_leaves = acaciaWinter
 	leaves = leavesWinter
-	grass = grassWinter
-	dirt_with_snow = dirt_with_snowDefault
+	seaosnsGrass = grassWinter
 elseif seasons.season == "spring" then 
 	jungleLeaves = junglespring
 	acacia_leaves = acaciaSpring
 	leaves = leavesspring
-	grass = grassSpring
-	dirt_with_snow = dirt_with_snowNotWinter
+	seaosnsGrass = grassSpring
 elseif seasons.season == "fall" then
 	jungleLeaves = jungleFall
 	acacia_leaves = acaciaFall
 	leaves = leavesFall
-	grass = grassFall
-	dirt_with_snow = dirt_with_snowNotWinter
+	seaosnsGrass = grassFall
 else
 	jungleLeaves = jungleDefault
 	acacia_leaves = acaciaDefault
 	leaves = leavesDefault
-	grass = grassDefault
-	dirt_with_snow = dirt_with_snowNotWinter
+	seaosnsGrass = grassDefault
 end
 
 --
@@ -192,7 +183,7 @@ if seasons.season == "winter" then
 	})
 else
 	minetest.override_item("default:dirt_with_snow", {
-		tiles = dirt_with_snow,
+		tiles = seaosnsGrass,
 		sounds = default.node_sound_dirt_defaults({
 			footstep = {name = "default_grass_footstep", gain = 0.25},
 		}),
@@ -234,7 +225,7 @@ if seasons.season == "fall" or seasons.season == "winter" or seasons.season == "
 		special_tiles = {leaves[2]},
 	})
 	minetest.override_item("default:dirt_with_grass", {
-		tiles = grass,
+		tiles = seaosnsGrass,
 	})
 end
 
