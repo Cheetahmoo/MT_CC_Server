@@ -1,4 +1,0 @@
-default
-plasters
-plaster?
-seasons

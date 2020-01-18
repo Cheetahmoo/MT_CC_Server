@@ -215,8 +215,8 @@ farming.grow_plant = function(pos, elapsed)
 	local above = minetest.get_node({x = pos.x, y = pos.y + 1, z = pos.z})
 	--chesk if growing from lights aka if  air is above plant is outside
 	if minetest.get_node(above).name ~= "air" then
-		timeMin = 80
-		timeMax = 120
+		timeMin = 50
+		timeMax = 100
 	end
 	-- grow seed
 	if minetest.get_item_group(node.name, "seed") and def.fertility then

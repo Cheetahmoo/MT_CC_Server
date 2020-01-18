@@ -266,13 +266,6 @@ local clay_col = {
         ["black"]  = "porcelain:stained_clay_black",
         ["white"]  = "porcelain:stained_clay_white",
     },
-    ["default:clay"] = {
-        ["red"]    = "porcelain:stained_clay_red",
-        ["blue"]   = "porcelain:stained_clay_blue",
-        ["yellow"] = "porcelain:stained_clay_yellow",
-        ["black"]  = "porcelain:stained_clay_black",
-        ["white"]  = "porcelain:stained_clay_white",
-    },
     ["porcelain:stained_clay_white"] = {
         ["red"]    = "porcelain:stained_clay_red",
         ["blue"]   = "porcelain:stained_clay_blue",
@@ -288,9 +281,26 @@ local clay_col = {
         ["white"]  = "porcelain:stained_clay_brown",
     },
 }
+
 for name, effects in pairs(clay_col) do
     if minetest.registered_nodes[name] then
         minetest.clear_craft({output = name})
+        oil_stains.register_stainable_node(name, effects)
+    end
+end
+
+--Make Clay stainable
+local def_clay_col = {
+    ["default:clay"] = {
+        ["red"]    = "porcelain:stained_clay_red",
+        ["blue"]   = "porcelain:stained_clay_blue",
+        ["yellow"] = "porcelain:stained_clay_yellow",
+        ["black"]  = "porcelain:stained_clay_black",
+        ["white"]  = "porcelain:stained_clay_white",
+    },
+}
+for name, effects in pairs(def_clay_col) do
+    if minetest.registered_nodes[name] then
         oil_stains.register_stainable_node(name, effects)
     end
 end

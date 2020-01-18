@@ -38,6 +38,12 @@ for i, row in ipairs(porcelain_colors) do
 		recipe = {"dye:"..dye, "default:clay"},
     })
 
+    minetest.register_craft({
+		type = "shapeless",
+		output = "default:clay_lump 4",
+		recipe = {"porcelain:stained_clay_"..color},
+    })
+
     --Porcelain
     local porcelain_def = {
         name = "porcelain:porcelain_"..color,
