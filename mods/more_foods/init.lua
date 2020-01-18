@@ -50,8 +50,8 @@ minetest.register_craft({
 })
 
 -------Register Food-------
-hunger.register_food("more_foods:soup_mushroom_mix", 4, "more_foods:soup_bowl 1", nil, 3)
+hunger.register_food("more_foods:soup_mushroom_mix", 4, nil, nil, 3)--hunger.register_food("more_foods:soup_mushroom_mix", 4, "more_foods:soup_bowl 1", nil, 3)
 
-hunger.register_food("more_foods:soup_mushroom_mix_poison", 1, "more_foods:soup_bowl 1", 5)
+hunger.register_food("more_foods:soup_mushroom_mix_poison", 1, nil, 5)--hunger.register_food("more_foods:soup_mushroom_mix_poison", 1, "more_foods:soup_bowl 1", 5)
 
-hunger.register_food("more_foods:soup_mushroom_brown", 4, "more_foods:soup_bowl 1")
+hunger.register_food("more_foods:soup_mushroom_brown", 4, nil)--hunger.register_food("more_foods:soup_mushroom_brown", 4, "more_foods:soup_bowl 1")

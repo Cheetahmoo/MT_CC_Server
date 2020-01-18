@@ -5,7 +5,7 @@
 local function node_sound_plaster()
 	local table = {}
 	table.footstep = {name = "plaster_footstep", gain = 0.3, }
-	table.dug = {name = "default_hard_footstep", gain = 1.0}
+	table.dug = {name = "default_sand_footstep", gain = 1.0}
 	table.place = {name = "default_place_node_hard", gain = 1.0}
 	--default.node_sound_defaults(table)
 	return table
@@ -64,7 +64,7 @@ for i, color in ipairs(plaster_colors) do
 		description = def.description,
 		inventory_image = "[inventorycube{"..def.inv_img.."&[sheet:4x4:1,1{"..def.inv_img.."&[sheet:4x4:1,1{"..def.inv_img.."&[sheet:4x4:1,1{",
         tiles = def.tiles,
-        groups = {crumbly = 2, cracky = 3},
+        groups = {crumbly = 2},
         sounds = def.sounds,
 	})
 	--Make cuttable
@@ -72,7 +72,7 @@ for i, color in ipairs(plaster_colors) do
         stairsplus:register_all("plaster", "plaster_"..color, def.name, {
             description = def.description,
 			tiles = def.tiles,
-            groups = {crumbly = 2, cracky = 3}, --cannot use plaster_def because stairsplus:register_all adds not_in_creative_inventory to the groups reference
+            groups = {crumbly = 2}, --cannot use plaster_def because stairsplus:register_all adds not_in_creative_inventory to the groups reference
             sounds = def.sounds,
             sunlight_propagates = true,
         })
