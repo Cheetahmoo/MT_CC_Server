@@ -112,7 +112,16 @@ local function FreezeSoil(pos)
 	if pos.y <= seasons.minHeight then
 		return
 	end
-	minetest.set_node(pos, {name = "seasons:soil_wet_frozen"})
+
+	-- if soil is desert soil then replace it with forzen dester
+	local node = minetest.get_node(pos)
+	minetest.chat_send_all(node.name)
+	if node.name == "farming:desert_sand_soil_wet" or node.name == "farming:desert_sand_soil" then
+		minetest.set_node(pos, {name = "seasons:desert_soil_wet_frozen"})
+	else
+		minetest.set_node(pos, {name = "seasons:soil_wet_frozen"})
+	end
+
 	local above = {x = pos.x, y = pos.y + 1, z = pos.z}
 	local aboveNode = minetest.get_node(above)
 
@@ -254,48 +263,39 @@ if seasons.season == "winter" then
 			Add_snow_above(pos, false, true)
 		end
 	})
+	minetest.register_abm({
+		nodenames = {"farming:soil", 'farming:soil_wet', 'farming:desert_sand_soil_wet', 'farming:desert_sand_soil'},
+		interval = 1,
+		chance = 1,
+		action = function(pos, node)
+			--Checks to see if the position of the node to add snow to is above the min height
+			if pos.y <= seasons.minHeight then
+				return
+			end
+			FreezeSoil(pos)
+		end
+	})
 end
 
-minetest.register_abm({
-	nodenames = {"farming:soil", 'farming:soil_wet', "seasons:soil_wet_frozen", "group:farming_soil"},
-	interval = 1,
-	chance = 1,
-	action = function(pos, node)
-		--Checks to see if the position of the node to add snow to is above the min height
-		if pos.y <= seasons.minHeight then
-			return
-		end
-
-		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
-		local name = minetest.get_node(above).name
-		local nodedef = minetest.registered_nodes[name]
-		
-		if  seasons.season == "winter" then
-			local pos1 = {x = pos.x -1, y = pos.y-1, z = pos.z -1}
-			local pos2 = {x = pos.x +1, y = pos.y+1, z = pos.z +1}	
-			local warm_nodes = minetest.find_nodes_in_area(pos1, pos2, "group:heatable")
-			
-			--minetest.set_node(warm_node, {name = "defualt:stone"})
-			if not warm_nodes then
-				FreezeSoil(pos)
-			else
-				for i = 1, #warm_nodes do
-					local heat_level =  minetest.get_meta(warm_nodes[i]):get_float("heatLevel")
-					if heat_level > 0 then
-						if node.name == "seasons:soil_wet_frozen" then
-							though_node(pos, "farming:soil_wet")
-						end
-						return
-					end
-				end
-				FreezeSoil(pos)
+--UnFreez Soil
+if  seasons.season ~= "winter" then
+	minetest.register_abm({
+		nodenames = {'seasons:soil_wet_frozen', 'seasons:desert_soil_wet_frozen'},
+		interval = 1,
+		chance = 1,
+		action = function(pos, node)
+			--Checks to see if the position of the node to add snow to is above the min height
+			if pos.y <= seasons.minHeight then
+				return
 			end
-		elseif node.name == "seasons:soil_wet_frozen" then
-			minetest.set_node(pos, {name = "farming:soil_wet"})
+			if node.name == "seasons:desert_soil_wet_frozen" then
+				minetest.set_node(pos, {name = "farming:desert_sand_soil_wet"})
+			else
+				minetest.set_node(pos, {name = "farming:soil_wet"})
+			end
 		end
-	end
-})
-
+	})
+end
 --------------------------------------------spring------------------------------------------------------
 --[[Leaves begin to change. Snow blocks and flakes begin to melt. Force fields defrost. Ice begins to melt
 if seasons.season == "spring" then
