@@ -266,13 +266,13 @@ minetest.register_node("seasons:apple_roten", {
 minetest.register_node("seasons:soil_wet_frozen", {
 	tiles = {"default_dirt.png^winter_farming_soil_wet.png", "default_dirt.png^winter_farming_soil_wet_side.png"},
 	drop = "default:dirt",
-	groups = {crumbly=3, not_in_creative_inventory=1},
+	groups = {cracky=3, not_in_creative_inventory=1, slippery=2},
 	sounds = default.node_sound_glass_defaults(),
 })
 
 minetest.register_node("seasons:desert_soil_wet_frozen", {
 	tiles = {"farming_desert_sand_soil.png^winter_farming_soil_wet_side.png", "default_desert_sand.png^winter_farming_soil_wet_side.png"},
 	drop = "default:desert_sand",
-	groups = {cracky = 3, not_in_creative_inventory=1, farming_soil = 1},
+	groups = {cracky = 3, not_in_creative_inventory=1, slippery=2},
 	sounds = default.node_sound_glass_defaults(),
 })

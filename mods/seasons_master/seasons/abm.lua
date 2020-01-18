@@ -120,7 +120,7 @@ local function FreezeSoil(pos)
 
 	-- if soil is desert soil then replace it with forzen dester
 	local node = minetest.get_node(pos)
-	minetest.chat_send_all(node.name)
+	--minetest.chat_send_all(node.name)
 	if node.name == "farming:desert_sand_soil_wet" or node.name == "farming:desert_sand_soil" then
 		minetest.set_node(pos, {name = "seasons:desert_soil_wet_frozen"})
 	else
@@ -269,7 +269,7 @@ if seasons.season == "winter" then
 		end
 	})
 	minetest.register_abm({
-		nodenames = {"farming:soil", 'farming:soil_wet', 'farming:desert_sand_soil_wet', 'farming:desert_sand_soil'},
+		nodenames = {"farming:soil", 'farming:soil_wet', 'farming:desert_sand_soil_wet', 'farming:desert_sand_soil', 'group:farming_soil'},
 		interval = 1,
 		chance = 1,
 		action = function(pos, node)
