@@ -29,6 +29,8 @@ local function Add_snow_above(_pos, addBlock, replaceNods)
 		if hitNodePos.y <= seasons.minHeight then
 			return
 		end
+
+		local hitNodeAbove = minetest.get_node(hit.above);
 		local name = minetest.get_node(hit.above).name
 		local hitName = minetest.get_node(hitNodePos).name
 		local hitNameBelow = minetest.get_node({x=hit.above.x, y=hit.above.y-2, z=hit.above.z}).name
@@ -42,6 +44,9 @@ local function Add_snow_above(_pos, addBlock, replaceNods)
 
 			elseif minetest.get_node_group(hitName, "replaced_by_snow") >= 1 then -- If node has Group is replaced_by_snow then repace it with snow.
 				minetest.set_node(hitNodePos,{name = "default:snow"})
+
+			elseif minetest.get_node_group(hitNodeAbove.name, "replaced_by_snow") >= 1 then -- If node above has Group is replaced_by_snow then repace it with snow.
+				minetest.set_node(hit.above,{name = "default:snow"})
 			end
 		end
 	end
