@@ -16,7 +16,7 @@ farming.register_plant("farming:wheat", {
 	minlight = 13,
 	maxlight = default.LIGHT_MAX,
 	fertility = {"grassland"},
-	groups = {flammable = 4, replacedBySnow =1},
+	groups = {flammable = 4, replaced_by_snow = 1},
 	place_param2 = 3,
 })
 minetest.register_craftitem("farming:flour", {
@@ -53,7 +53,7 @@ farming.register_plant("farming:cotton", {
 	minlight = 13,
 	maxlight = default.LIGHT_MAX,
 	fertility = {"grassland", "desert"},
-	groups = {flammable = 4, replacedBySnow=1},
+	groups = {flammable = 4, replaced_by_snow=1},
 })
 
 minetest.register_alias("farming:string", "farming:cotton")

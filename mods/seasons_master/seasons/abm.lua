@@ -23,18 +23,25 @@ local function Add_snow_above(_pos, addBlock, replaceNods)
 	raycast = minetest.raycast(_pos, {x = _pos.x, y = _pos.y - 35, z = _pos.z},false, true)
 	hit = raycast:next()
 	if hit then	
-		local hitNode = {x=hit.above.x, y=hit.above.y-1, z=hit.above.z}
-		if hitNode.y <= seasons.minHeight then
+		--Node that is hit be raycast
+		local hitNodePos = {x=hit.above.x, y=hit.above.y-1, z=hit.above.z}
+
+		if hitNodePos.y <= seasons.minHeight then
 			return
 		end
 		local name = minetest.get_node(hit.above).name
-		local hitName = minetest.get_node(hitNode).name
+		local hitName = minetest.get_node(hitNodePos).name
 		local hitNameBelow = minetest.get_node({x=hit.above.x, y=hit.above.y-2, z=hit.above.z}).name
-		if minetest.get_node_group(hitName, "no_snow_cover") == 0 then
+
+		if minetest.get_node_group(hitName, "no_snow_cover") == 0 then -- If node has group no_snow_cover then don't place snow on top
 			if (name == "air" or minetest.get_node_group(hitName, "farming_soil") >= 1) and hitName ~= "default:snowblock" and (get_nodedef_field(hitName, "drawtype") == "normal" or minetest.get_node_group(hitName, "leaves") >=1 or minetest.get_node_group(hitName, "snow_cover") >=1 )then
 				minetest.set_node(hit.above, {name = "default:snow"})
+
 			elseif hitName == "default:snow" and minetest.get_node_group(hitNameBelow, "leaves") == 0 then
-				minetest.set_node(hitNode, {name = "default:snowblock"})
+				minetest.set_node(hitNodePos, {name = "default:snowblock"})
+
+			elseif minetest.get_node_group(hitName, "replaced_by_snow") >= 1 then -- If node has Group is replaced_by_snow then repace it with snow.
+				minetest.set_node(hitNodePos,{name = "default:snow"})
 			end
 		end
 	end
@@ -108,8 +115,8 @@ local function FreezeSoil(pos)
 	minetest.set_node(pos, {name = "seasons:soil_wet_frozen"})
 	local above = {x = pos.x, y = pos.y + 1, z = pos.z}
 	local aboveNode = minetest.get_node(above)
-	--minetest.log("warning", aboveNode.name .. ": ".. minetest.get_item_group(aboveNode.name, "replacedbysnow"))
-	if minetest.get_item_group(aboveNode.name, "replacedbysnow") >=1 then
+
+	if minetest.get_item_group(aboveNode.name, "replaced_by_snow") >=1 then
 		minetest.set_node(above, {name="air"})
 	end
 end
@@ -250,7 +257,7 @@ if seasons.season == "winter" then
 end
 
 minetest.register_abm({
-	nodenames = nodenames = {"farming:soil", 'farming:soil_wet', "seasons:soil_wet_frozen", "group:farming_soil"},
+	nodenames = {"farming:soil", 'farming:soil_wet', "seasons:soil_wet_frozen", "group:farming_soil"},
 	interval = 1,
 	chance = 1,
 	action = function(pos, node)
