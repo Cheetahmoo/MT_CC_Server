@@ -31,7 +31,7 @@ local function Add_snow_above(_pos, addBlock, replaceNods)
 		local hitName = minetest.get_node(hitNode).name
 		local hitNameBelow = minetest.get_node({x=hit.above.x, y=hit.above.y-2, z=hit.above.z}).name
 		if minetest.get_node_group(hitName, "no_snow_cover") == 0 then
-			if (name == "air" or hitName == "farming:soil" or hitName == "farming:soil_wet" or hitName == "farming:soil_wet_frozen") and hitName ~= "default:snowblock" and (get_nodedef_field(hitName, "drawtype") == "normal" or minetest.get_node_group(hitName, "leaves") >=1 or minetest.get_node_group(hitName, "snow_cover") >=1 )then
+			if (name == "air" or minetest.get_node_group(hitName, "farming_soil") >= 1) and hitName ~= "default:snowblock" and (get_nodedef_field(hitName, "drawtype") == "normal" or minetest.get_node_group(hitName, "leaves") >=1 or minetest.get_node_group(hitName, "snow_cover") >=1 )then
 				minetest.set_node(hit.above, {name = "default:snow"})
 			elseif hitName == "default:snow" and minetest.get_node_group(hitNameBelow, "leaves") == 0 then
 				minetest.set_node(hitNode, {name = "default:snowblock"})
@@ -183,11 +183,9 @@ if seasons.season == "winter" then
 			seasons.snowstorm = false
 			seasons.snowstormSnow = false
 			nextStromTime = math.random(120,300)
-			minetest.chat_send_all(nextStromTime)
 		else
 			seasons.snowstorm = true
 			nextStromTime = math.random(120,300)
-			minetest.chat_send_all(nextStromTime)
 		end
 		stimer = 0
 	end)
@@ -252,7 +250,7 @@ if seasons.season == "winter" then
 end
 
 minetest.register_abm({
-	nodenames = {"farming:soil", 'farming:soil_wet', "seasons:soil_wet_frozen"},
+	nodenames = nodenames = {"farming:soil", 'farming:soil_wet', "seasons:soil_wet_frozen", "group:farming_soil"},
 	interval = 1,
 	chance = 1,
 	action = function(pos, node)
