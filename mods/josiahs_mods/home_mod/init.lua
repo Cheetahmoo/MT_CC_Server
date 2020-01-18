@@ -119,16 +119,4 @@ minetest.register_craft({
 	recipe = {
 		{'default:glass','default:obsidian_shard',''},	
 	}
-})			
-minetest.register_craftitem("home_mod:mortar", {
-	description = "Mortar",
-	inventory_image = ("morter.png"),
-	groups = {lump= 3},
 })
-minetest.register_craft({
-	output = 'home_mod:mortar',
-	recipe = {	
-		{'default:dirt','default:sand',''},		
-		{'default:sand','default:dirt',''},
-	}
-})	
