@@ -27,7 +27,7 @@ minetest.register_craftitem("more_foods:soup_mushroom_mix_poison", {
 
 ------Crafting-------
 minetest.register_craft({
-	output = "more_foods:soup_bowl 3",
+	output = "more_foods:soup_bowl 6",
 	recipe = {
         {"group:wood", "", "group:wood"},
         {"", "group:wood", ""},

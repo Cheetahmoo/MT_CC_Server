@@ -175,43 +175,6 @@ for name, settings in pairs(blight_settings_by_name) do
     end
 end
 
-----------------------------------------------------------------------------
---                      CHANGES TO FARMING MOD
-----------------------------------------------------------------------------
---CHANGE HARVEST DROPS--
-local crops = {
-    {mod = "farming", name = "wheat", steps = 8},
-    {mod = "farming", name = "cotton", steps = 8},
-}
-
-for i = 1, #crops do
-    
-    for j = 1, crops[i].steps do
-        local node_name = crops[i].mod..":"..crops[i].name.."_"..j
-        local drop_thing = crops[i].mod..":seed_"..crops[i].name
-        local drop_addit = ""
-        if j == crops[i].steps then
-            drop_thing = crops[i].mod..":"..crops[i].name
-            drop_addit = drop_thing.." 2"
-        end
-        local drop = {
-            items = {
-                {items = {drop_thing}, rarity = 1},
-                {items = {drop_addit}, rarity = 2},
-            }
-        }
-
-        minetest.override_item(node_name,{
-            drop = drop,
-        })
-    end
-
-    minetest.register_craft({
-        type = "shapeless",
-        output = crops[i].mod..":seed_"..crops[i].name,
-        recipe = {crops[i].mod..":"..crops[i].name},
-    })
-end
 
 ----------------------------------------------------------------------------
 --                            FUNCTIONS
