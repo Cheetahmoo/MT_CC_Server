@@ -4,7 +4,7 @@
 --Register wools as stainable nodes
 local wool_col = {
     --Node to Stain        After Adding Red         After Adding Blue             After Adding Yellow             After Adding White            After Adding Black
-    ["wool:white"]      = {["red"] = "wool:pink",   ["blue"] = "wool:cyan",       ["yellow"] = "wool:yellow",     ["white"] = "wool:white",     ["black"] = "wool:grey"},
+    --["wool:white"]      = {["red"] = "wool:pink",   ["blue"] = "wool:cyan",       ["yellow"] = "wool:yellow",     ["white"] = "wool:white",     ["black"] = "wool:grey"},
     ["wool:grey"]       = {["red"] = "wool:pink",   ["blue"] = "wool:cyan",       ["yellow"] = "wool:yellow",     ["white"] = "wool:white",     ["black"] = "wool:dark_grey"},
     ["wool:dark_grey"]  = {["red"] = "wool:red",    ["blue"] = "wool:blue",       ["yellow"] = "wool:brown",      ["white"] = "wool:grey",      ["black"] = "wool:black"},
     ["wool:black"]      = {["red"] = "wool:black",  ["blue"] = "wool:black",      ["yellow"] = "wool:black",      ["white"] = "wool:dark_grey", ["black"] = "wool:black"},
@@ -23,6 +23,22 @@ local wool_col = {
 for name, effects in pairs(wool_col) do
     if minetest.registered_nodes[name] then
         minetest.clear_craft({output = name})
+        oil_stains.register_stainable_node(name, effects)
+    end
+end
+
+--Make White Wool stainable (while keeping craft)
+local white_wool_col = {
+    ["default:clay"] = {
+        ["red"]    = "wool:pink",
+        ["blue"]   = "wool:cyan",
+        ["yellow"] = "wool:yellow",
+        ["black"]  = "wool:white",
+        ["white"]  = "wool:grey",
+    },
+}
+for name, effects in pairs(white_wool_col) do
+    if minetest.registered_nodes[name] then
         oil_stains.register_stainable_node(name, effects)
     end
 end
