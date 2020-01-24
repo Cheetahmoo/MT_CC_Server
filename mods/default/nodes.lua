@@ -1812,7 +1812,70 @@ minetest.register_node("default:ladder", {
 	sounds = default.node_sound_wood_defaults(),
 })
 
+--(ADDED BY JGC 1-22-20)
+default.register_fence("default:fence_wood", {
+	description = "Apple Wood Fence",
+	texture = "default_fence_wood.png",
+	inventory_image = "default_fence_overlay.png^default_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	wield_image = "default_fence_overlay.png^default_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	material = "default:wood",
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
+	sounds = default.node_sound_wood_defaults()
+})
 
+default.register_fence("default:fence_acacia_wood", {
+	description = "Acacia Wood Fence",
+	texture = "default_fence_acacia_wood.png",
+	inventory_image = "default_fence_overlay.png^default_acacia_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	wield_image = "default_fence_overlay.png^default_acacia_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	material = "default:acacia_wood",
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
+	sounds = default.node_sound_wood_defaults()
+})
+
+default.register_fence("default:fence_junglewood", {
+	description = "Jungle Wood Fence",
+	texture = "default_fence_junglewood.png",
+	inventory_image = "default_fence_overlay.png^default_junglewood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	wield_image = "default_fence_overlay.png^default_junglewood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	material = "default:junglewood",
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
+	sounds = default.node_sound_wood_defaults()
+})
+
+default.register_fence("default:fence_pine_wood", {
+	description = "Pine Wood Fence",
+	texture = "default_fence_pine_wood.png",
+	inventory_image = "default_fence_overlay.png^default_pine_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	wield_image = "default_fence_overlay.png^default_pine_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	material = "default:pine_wood",
+	groups = {choppy = 3, oddly_breakable_by_hand = 2, flammable = 3},
+	sounds = default.node_sound_wood_defaults()
+})
+--[[
+default.register_fence("default:fence_aspen_wood", {
+	description = "Aspen Wood Fence",
+	texture = "default_fence_aspen_wood.png",
+	inventory_image = "default_fence_overlay.png^default_aspen_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	wield_image = "default_fence_overlay.png^default_aspen_wood.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	material = "default:aspen_wood",
+	groups = {choppy = 3, oddly_breakable_by_hand = 2, flammable = 3},
+	sounds = default.node_sound_wood_defaults()
+})
+--]]
+--(END OF ADDITION)
+
+--[[ (JGC 1-22-20)
 local fence_texture =
 	"default_fence_overlay.png^default_wood.png^default_fence_overlay.png^[makealpha:255,126,126"
 minetest.register_node("default:fence_wood", {
@@ -1831,7 +1894,7 @@ minetest.register_node("default:fence_wood", {
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
 	sounds = default.node_sound_wood_defaults(),
 })
-
+--]] --(JGC 1-22-20)
 
 minetest.register_node("default:glass", {
 	description = "Glass",

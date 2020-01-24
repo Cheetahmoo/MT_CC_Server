@@ -1,11 +1,11 @@
 --[[
 More Blocks: ownership handling
 
-Copyright (c) 2011-2015 Calinou and contributors.
+Copyright © 2011-2020 Hugo Locurcio and contributors.
 Licensed under the zlib license. See LICENSE.md for more information.
 --]]
 
-local S = moreblocks.gettext
+local S = moreblocks.S
 
 function moreblocks.node_is_owned(pos, placer)
 	local ownername = false
@@ -22,18 +22,18 @@ function moreblocks.node_is_owned(pos, placer)
 			end
 		end
 
-	elseif type(isprotect)=="function" then 					-- glomie's protection mod
+	elseif type(isprotect)=="function" then						-- glomie's protection mod
 		if not isprotect(5, pos, placer) then
 			ownername = S("someone")
 		end
-	elseif type(protector)=="table" and type(protector.can_dig)=="function" then 					-- Zeg9's protection mod
+	elseif type(protector)=="table" and type(protector.can_dig)=="function" then					-- Zeg9's protection mod
 		if not protector.can_dig(5, pos, placer) then
 			ownername = S("someone")
 		end
 	end
 
 	if ownername ~= false then
-		minetest.chat_send_player( placer:get_player_name(), S("Sorry, %s owns that spot."):format(ownername) )
+		minetest.chat_send_player( placer:get_player_name(), S("Sorry, @1 owns that spot.", ownername) )
 		return true
 	else
 		return false

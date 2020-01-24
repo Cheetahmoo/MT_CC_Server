@@ -118,7 +118,9 @@ local blight_settings_by_group = {
 
 local blight_settings_by_name = {  
     ["default:tree"]          = {new_node = "oil_separation:tree_blighted", chance = 1, contaminates = false},
+    ["mt_cc_nodes:bark_ball"] = {new_node = "oil_separation:tree_blighted", chance = 1, contaminates = false},
     ["default:pine_tree"]     = {new_node = "oil_separation:pine_tree_blighted", chance = 1, contaminates = false},
+    ["mt_cc_nodes:bark_ball_pine"] = {new_node = "oil_separation:pine_tree_blighted", chance = 1, contaminates = false},
     ["default:acacia_tree"]   = {new_node = "oil_separation:acacia_tree_blighted", chance = 1, contaminates = false},
     ["default:grass_1"]       = {new_node = "air", chance = 1, contaminates = false},
     ["default:grass_2"]       = {new_node = "air", chance = 1, contaminates = false},

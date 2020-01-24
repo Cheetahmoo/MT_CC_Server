@@ -62,26 +62,7 @@ minetest.register_craft({
 		{'default:pine_tree'},
 	}
 })
-minetest.register_craftitem("default:compresed_mese_fragment",{
-	description = "Compresed Mese Fragment",
-	inventory_image = ("compresed_mese_fragment.png"),
-	})
-minetest.register_craft({
-	output = 'default:compresed_mese_fragment',
-	recipe = {
-		{'default:mese_crystal_fragment', 'default:mese_crystal_fragment', 'default:mese_crystal_fragment'},
-		{'default:mese_crystal_fragment', 'default:mese_crystal_fragment', 'default:mese_crystal_fragment'},
-		{'default:mese_crystal_fragment', 'default:mese_crystal_fragment', 'default:mese_crystal_fragment'},
-	}
-})
-minetest.register_craft({
-	output = 'default:mese_crystal',
-	recipe = {
-		{'default:compresed_mese_fragment', 'default:compresed_mese_fragment', 'default:compresed_mese_fragment'},
-		{'default:compresed_mese_fragment', 'default:compresed_mese_fragment', 'default:compresed_mese_fragment'},
-		{'default:compresed_mese_fragment', 'default:compresed_mese_fragment', 'default:compresed_mese_fragment'},
-	}
-})
+
 minetest.register_craft({
 	output = 'default:acacia_wood 4',
 	recipe = {
@@ -95,7 +76,7 @@ minetest.register_craft({
 		{'group:wood'},
 	}
 })
-
+--[[ (JGC 1-22-20)
 minetest.register_craft({
 	output = 'default:fence_wood 2',
 	recipe = {
@@ -103,7 +84,7 @@ minetest.register_craft({
 		{'group:stick', 'group:stick', 'group:stick'},
 	}
 })
-
+--]]
 minetest.register_craft({
 	output = 'default:sign_wall',
 	recipe = {
@@ -617,12 +598,14 @@ minetest.register_craft({
 	}
 })
 
+--[[ (JGC 1-22-20)
 minetest.register_craft({
 	output = 'default:mese_crystal_fragment 9',
 	recipe = {
 		{'default:mese_crystal'},
 	}
 })
+--]]
 
 minetest.register_craft({
 	output = 'default:meselamp 1',

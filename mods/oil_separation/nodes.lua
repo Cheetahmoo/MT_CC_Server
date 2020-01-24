@@ -211,6 +211,13 @@ minetest.register_craft({
     output = "oil_separation:seed_paste_oily",
 })
 
+--FUEL: SEED PASTE OILY--
+minetest.register_craft({
+	type = "fuel",
+	recipe = "oil_separation:seed_paste_oily",
+	burntime = 70,
+})
+
 --SEED PASTE DRY--
 minetest.register_node("oil_separation:seed_paste_dry", {
     description = "Dry Seed Paste",

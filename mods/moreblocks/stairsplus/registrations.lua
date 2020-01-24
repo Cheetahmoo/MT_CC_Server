@@ -1,12 +1,14 @@
 --[[
 More Blocks: registrations
 
-Copyright (c) 2011-2015 Calinou and contributors.
+Copyright © 2011-2020 Hugo Locurcio and contributors.
 Licensed under the zlib license. See LICENSE.md for more information.
 --]]
 
+-- default registrations
 local default_nodes = { -- Default stairs/slabs/panels/microblocks:
 	"stone",
+	"stone_block",
 	"cobble",
 	"mossycobble",
 	"brick",
@@ -14,9 +16,11 @@ local default_nodes = { -- Default stairs/slabs/panels/microblocks:
 	"steelblock",
 	"goldblock",
 	"copperblock",
-	"bronzeblock",--Stoped at
+	"bronzeblock",
 	"diamondblock",
+	"tinblock",
 	"desert_stone",
+	"desert_stone_block",
 	"desert_cobble",
 	"meselamp",
 	"glass",
@@ -26,245 +30,137 @@ local default_nodes = { -- Default stairs/slabs/panels/microblocks:
 	"junglewood",
 	"pine_tree",
 	"pine_wood",
+	"acacia_tree",
+	"acacia_wood",
 	"aspen_tree",
 	"aspen_wood",
-	"acacia_wood",
 	"obsidian",
+	"obsidian_block",
+	"obsidianbrick",
 	"obsidian_glass",
 	"stonebrick",
 	"desert_stonebrick",
 	"sandstonebrick",
-	"obsidianbrick",
-	"ice"
-}
---------Farming Nodes ------------
-local farming_nodes = {
-	"straw"
-}
--------- Wool Nodes ------------
-local wool_nodes = {
-	"white",
-	"grey",
-	"black",
-	"red",
-	"yellow",
-	"green",
-	"cyan",
-	"blue",
-	"magenta",
-	"orange",
-	"violet",
-	"brown",
-	"pink",
-	"dark_grey",
-	"dark_green"
-}
-local plasters_init = {
-	"plaster_raw",
-	"plaster_green",
-	"plaster_blue",
-	"plaster_black",
-	"plaster_dark_grey",
-	"plaster_brown",
-	"plaster_cyan",
-	"plaster_dark_green",
-	"plaster_magenta",
-	"plaster_orange",
-	"plaster_pink",
-	"plaster_red",
-	"plaster_violet",
-	"plaster_yellow",
-	"dad_block6"
+	"silver_sandstone",
+	"silver_sandstone_brick",
+	"silver_sandstone_block",
+	"desert_sandstone",
+	"desert_sandstone_brick",
+	"desert_sandstone_block",
+	"sandstone_block",
+	"coral_skeleton",
+	"ice",
 }
 
-local moretiles_init = {
-	"western_stone",
-	"western_stone_block",
-	"eastern_stone",
-	"eastern_stone_block",
-}
-local porcelain_init = {
-	"orange_stained_stone",
-	"cyan_stained_stone",
-	"blue_stained_stone",
-	"green_stained_stone",
-	"yellow_stained_stone",
-	"brown_stained_stone",
-	"red_stained_stone",
-	"orange_porcelain",
-	"cyan_porcelain",
-	"blue_porcelain",
-	"green_porcelain",
-	"yellow_porcelain",
-	"red_porcelain",
-	"brown_porcelain",
-	"white_porcelain",
-
-}
-for _, name in pairs(porcelain_init) do
-	local nodename = "porcelain:" .. name
-	local ndef = minetest.registered_nodes[nodename]
-	if ndef then
-		local groups = {}
-		for k, v in pairs(ndef.groups)
-			-- Ignore wood and stone groups to not make them usable in crafting:
-			do if k ~= "wood" and k ~= "stone" and k ~= "snow_cover" then
-				groups[k] = v
-			end
-		end
-		local drop
-		if type(ndef.drop) == "string" then
-			drop = ndef.drop:sub(9)
-		end
-		stairsplus:register_all("moreblocks", name, nodename, {
-			description = ndef.description,
-			drop = drop,
-			groups = groups,
-			sounds = ndef.sounds,
-			tiles = ndef.tiles,
-			sunlight_propagates = true,
-			light_source = ndef.light_source
-		})
-	end
-end
 for _, name in pairs(default_nodes) do
-	local nodename = "default:" .. name
-	local ndef = minetest.registered_nodes[nodename]
-	if ndef then
-		local groups = {}
-		for k, v in pairs(ndef.groups)
-			-- Ignore wood and stone groups to not make them usable in crafting:
-			do if k ~= "wood" and k ~= "stone" and k ~= "snow_cover" then
-				groups[k] = v
-			end
-		end
-		local drop
+	local mod = "default"
+	local nodename = mod .. ":" .. name
+	if minetest.registered_nodes[nodename] then --ADDED BY JGC 1-20-20
+		local ndef = table.copy(minetest.registered_nodes[nodename])
+		ndef.sunlight_propagates = true
+
+		-- Stone and desert_stone drop cobble and desert_cobble respectively.
 		if type(ndef.drop) == "string" then
-			drop = ndef.drop:sub(9)
+			ndef.drop = ndef.drop:gsub(".+:", "")
 		end
-		
-		stairsplus:register_all("moreblocks", name, nodename, {
-			description = ndef.description,
-			drop = drop,
-			groups = groups,
-			sounds = ndef.sounds,
-			tiles = ndef.tiles,
-			sunlight_propagates = true,
-			light_source = ndef.light_source
-		})
+
+		-- Use the primary tile for all sides of cut glasslike nodes and disregard paramtype2.
+		if #ndef.tiles > 1 and ndef.drawtype and ndef.drawtype:find("glass") then
+			ndef.tiles = {ndef.tiles[1]}
+			ndef.paramtype2 = nil
+		end
+
+		mod = "moreblocks"
+		stairsplus:register_all(mod, name, nodename, ndef)
+		minetest.register_alias_force("stairs:stair_" .. name, mod .. ":stair_" .. name)
+		minetest.register_alias_force("stairs:stair_outer_" .. name, mod .. ":stair_" .. name .. "_outer")
+		minetest.register_alias_force("stairs:stair_inner_" .. name, mod .. ":stair_" .. name .. "_inner")
+		minetest.register_alias_force("stairs:slab_"  .. name, mod .. ":slab_"  .. name)
+	end--ADDED BY JGC 1-20-20
+end
+
+-- farming registrations
+if minetest.get_modpath("farming") then
+	local farming_nodes = {"straw"}
+	for _, name in pairs(farming_nodes) do
+		local mod = "farming"
+		local nodename = mod .. ":" .. name
+		local ndef = table.copy(minetest.registered_nodes[nodename])
+		ndef.sunlight_propagates = true
+
+		mod = "moreblocks"
+		stairsplus:register_all(mod, name, nodename, ndef)
+		minetest.register_alias_force("stairs:stair_" .. name, mod .. ":stair_" .. name)
+		minetest.register_alias_force("stairs:stair_outer_" .. name, mod .. ":stair_" .. name .. "_outer")
+		minetest.register_alias_force("stairs:stair_inner_" .. name, mod .. ":stair_" .. name .. "_inner")
+		minetest.register_alias_force("stairs:slab_"  .. name, mod .. ":slab_"  .. name)
 	end
 end
 
---Farmming
-for _, name in pairs(farming_nodes) do
-	local nodename = "farming:" .. name
-	local ndef = minetest.registered_nodes[nodename]
-	if ndef then
-		local groups = {}
-		for k, v in pairs(ndef.groups)
-			-- Ignore wood and stone groups to not make them usable in crafting:
-			do if k ~= "wood" and k ~= "stone" and k ~= "snow_cover" then
-				groups[k] = v
-			end
-		end
-		local drop
-		if type(ndef.drop) == "string" then
-			drop = ndef.drop:sub(9)
-		end
-		
-		stairsplus:register_all("moreblocks", name, nodename, {
-			description = ndef.description,
-			drop = drop,
-			groups = groups,
-			sounds = ndef.sounds,
-			tiles = ndef.tiles,
-			sunlight_propagates = true,
-			light_source = ndef.light_source
-		})
+-- wool registrations
+if minetest.get_modpath("wool") then
+	local dyes = {"white", "grey", "black", "red", "yellow", "green", "cyan",
+	              "blue", "magenta", "orange", "violet", "brown", "pink",
+	              "dark_grey", "dark_green"}
+	for _, name in pairs(dyes) do
+		local mod = "wool"
+		local nodename = mod .. ":" .. name
+		local ndef = table.copy(minetest.registered_nodes[nodename])
+		ndef.sunlight_propagates = true
+
+		-- Prevent dye+cut wool recipy from creating a full wool block.
+		ndef.groups.wool = nil
+
+		stairsplus:register_all(mod, name, nodename, ndef)
 	end
 end
 
---Wool--
-for _, name in pairs(wool_nodes) do
-	local nodename = "wool:" .. name
-	local ndef = minetest.registered_nodes[nodename]
-	if ndef then
-		local groups = {}
-		for k, v in pairs(ndef.groups)
-			-- Ignore wood and stone groups to not make them usable in crafting:
-			do if k ~= "wood" and k ~= "stone" and k ~= "snow_cover" then
-				groups[k] = v
-			end
-		end
-		local drop
-		if type(ndef.drop) == "string" then
-			drop = ndef.drop:sub(9)
-		end
-		
-		stairsplus:register_all("moreblocks", name, nodename, {
-			description = ndef.description,
-			drop = drop,
-			groups = groups,
-			sounds = ndef.sounds,
-			tiles = ndef.tiles,
-			sunlight_propagates = true,
-			light_source = ndef.light_source
-		})
-	end
+-- basic_materials, keeping the original other-mod-oriented names
+-- for backwards compatibility
+
+if minetest.get_modpath("basic_materials") then
+	stairsplus:register_all("technic","concrete","basic_materials:concrete_block",{
+		description = "Concrete",
+		tiles = {"basic_materials_concrete_block.png",},
+		groups = {cracky=1, level=2, concrete=1},
+		sounds = default.node_sound_stone_defaults(),
+	})
+
+	minetest.register_alias("prefab:concrete_stair","technic:stair_concrete")
+	minetest.register_alias("prefab:concrete_slab","technic:slab_concrete")
+
+	stairsplus:register_all("gloopblocks", "cement", "basic_materials:cement_block", {
+		description = "Cement",
+		tiles = {"basic_materials_cement_block.png"},
+		groups = {cracky=2, not_in_creative_inventory=1},
+		sounds = default.node_sound_stone_defaults(),
+		sunlight_propagates = true,
+	})
+
+	stairsplus:register_all("technic", "brass_block", "basic_materials:brass_block", {
+		description="Brass Block",
+		groups={cracky=1, not_in_creative_inventory=1},
+		tiles={"basic_materials_brass_block.png"},
+	})
+
 end
 
---Plaster
-for _, name in pairs(plasters_init) do
-	local nodename = "plasters:" .. name
-	local ndef = minetest.registered_nodes[nodename]
-	if ndef then
-		local groups = {}
-		for k, v in pairs(ndef.groups)
-			-- Ignore wood and stone groups to not make them usable in crafting:
-			do if k ~= "wood" and k ~= "stone" and k ~= "snow_cover" then
-				groups[k] = v
-			end
-		end
-		local drop
-		if type(ndef.drop) == "string" then
-			drop = ndef.drop:sub(9)
-		end
-		
-		stairsplus:register_all("moreblocks", name, nodename, {
-			description = ndef.description,
-			drop = drop,
-			groups = groups,
-			sounds = ndef.sounds,
-			tiles = ndef.tiles,
-			sunlight_propagates = true,
-			light_source = ndef.light_source
+-- Alias cuts of split_stone_tile_alt which was renamed checker_stone_tile.
+stairsplus:register_alias_all("moreblocks", "split_stone_tile_alt", "moreblocks", "checker_stone_tile")
+
+-- The following LBM is necessary because the name stair_split_stone_tile_alt
+-- conflicts with another node and so the alias for that specific node gets
+-- ignored.
+minetest.register_lbm({
+	name = "moreblocks:fix_split_stone_tile_alt_name_collision",
+	nodenames = {"moreblocks:stair_split_stone_tile_alt"},
+	action = function(pos, node)
+		minetest.set_node(pos, {
+			name = "moreblocks:stair_checker_stone_tile",
+			param2 = minetest.get_node(pos).param2
+
 		})
-	end
-end
-for _, name in pairs(moretiles_init) do
-	local nodename = "moretiles:" .. name
-	local ndef = minetest.registered_nodes[nodename]
-	if ndef then
-		local groups = {}
-		for k, v in pairs(ndef.groups)
-			-- Ignore wood and stone groups to not make them usable in crafting:
-			do if k ~= "wood" and k ~= "stone" and k ~= "snow_cover" then
-				groups[k] = v
-			end
-		end
-		local drop
-		
-		if type(ndef.drop) == "string" then
-			drop = ndef.drop:sub(9)
-		end
-		stairsplus:register_all("moreblocks", name, nodename, {
-			description = ndef.description,
-			drop = drop,
-			groups = groups,
-			sounds = ndef.sounds,
-			tiles = ndef.tiles,
-			sunlight_propagates = true,
-			light_source = ndef.light_source
-		})
-	end
-end
+		minetest.log('action', "LBM replaced " .. node.name ..
+			" at " .. minetest.pos_to_string(pos))
+	end,
+})

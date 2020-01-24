@@ -197,7 +197,7 @@ local strainer_selection_box = {
 
 --Cloth Strainer
 minetest.register_node("strainer:strainer_cloth", {
-	description = "Papyrus Strainer",
+	description = "Cloth Strainer",
 	tiles = {
         "strainer_strainer_cloth_top.png", 
         "strainer_strainer_cloth_bot.png",
