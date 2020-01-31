@@ -387,3 +387,55 @@ minetest.register_abm({
         scatter_blight(pos)
     end,
 })
+
+
+----------------------------------------------------------------------------
+--                             CHAT COMMANDS
+----------------------------------------------------------------------------
+minetest.register_chatcommand("crop_blight", {
+	params = {"<player>", "<action>"},
+	description = "crop_blight (<player> <action> 'status' = blighted/clean 'blight' = infect player 'clean' = disinfect player)",
+	privs = {server=true},
+    func = function( _, params)
+        --colect text commands
+        local str = params
+        str = str .. ' '
+        local command = {}
+        for word in str:gmatch("(.-) ") do
+            command[#command+1] = word
+        end
+        --test number of arguments
+        if #command > 2 then
+            return false, "Too many arguments entered."
+        elseif #command < 2 then
+            return false, "Too few arguments entered."
+        end
+        --test if player exists
+        local player = minetest.get_player_by_name(command[1])
+        if not player then
+            return false, "Player "..command[1].." doesn't exist or is not online."
+        end
+        --'status' command
+        if command[2] == "status" then
+            local message = ""
+            local infected_status = player:get_attribute("crop_blight:blight_time")
+            if infected_status then
+                message = command[1].." is blighted. Time of blight: "..infected_status
+            else
+                message = command[1].." is clean."
+            end
+            return false, message
+        end
+        --'blight' command
+        if command[2] == "blight" then
+            player:set_attribute("crop_blight:blight_time", minetest:get_gametime())
+            return false, command[1].." has been blighted."
+        end
+        --'clean' command
+        if command[2] == "clean" then
+            player:set_attribute("crop_blight:blight_time", nil)
+            return false, command[1].." has been cleaned."
+        end
+        return false, "Invalid Input"
+	end,
+})
