@@ -1,0 +1,11 @@
+nodes.lua
+    commented-out several new nodes which were not currently used on mt_cc_server
+circular_saw.lua
+    added micro block cost of new nodes to circular_saw.cost_in_microblocks{}
+    added new node names to circular_saw.names{}
+    changed shape of the formspec
+defs.lua
+    added new nodes' collision_box definition and
+    added new nodes' mesh name to stairsplus.defs{}
+registrations.lua
+    in code which makes most default nodes cuttable, added a check to be sure default node has been registered

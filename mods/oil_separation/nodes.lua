@@ -215,7 +215,7 @@ minetest.register_craft({
 minetest.register_craft({
 	type = "fuel",
 	recipe = "oil_separation:seed_paste_oily",
-	burntime = 70,
+	burntime = 50,
 })
 
 --SEED PASTE DRY--
@@ -224,6 +224,12 @@ minetest.register_node("oil_separation:seed_paste_dry", {
     tiles = {"oil_separation_seed_paste_dry.png"},
     groups = {crumbly = 3, falling_node = 1, not_in_creative_inventory = 1, flammable = 1, waste = 1},
     sounds = default.node_sound_sand_defaults(),
+    crop_blight_settings = {
+        infectable_settings = {
+            chance = 1,
+            infected_version = "oil_separation:seed_paste_dry_blighted",
+        }
+    }
 })
 
 --FUEL: SEED PASTE DRY--
