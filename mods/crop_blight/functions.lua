@@ -393,8 +393,8 @@ minetest.register_abm({
 --                             CHAT COMMANDS
 ----------------------------------------------------------------------------
 minetest.register_chatcommand("crop_blight", {
-	params = {"<player>", "<action>"},
-	description = "crop_blight (<player> <action> 'status' = blighted/clean 'blight' = infect player 'clean' = disinfect player)",
+	params = "<player> <action>",
+	description = "Check the blighted status of a player (<action> = 'status') or set the blighted status of a player (<action> = 'blight' or 'clean').",
 	privs = {server=true},
     func = function( _, params)
         --colect text commands

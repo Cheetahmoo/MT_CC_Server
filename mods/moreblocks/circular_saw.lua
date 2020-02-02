@@ -31,7 +31,7 @@ circular_saw.cost_in_microblocks = {
 	4, 2, 6, 7, 3, 7, 7, 4,
 	8, 3, 2, 6, 2, 1, 3, 4,
 	--(ADDED BY JGC)
-	4,2
+	4,2,6,4
 	--(END OF ADDITION)
 }
 
@@ -92,6 +92,8 @@ circular_saw.names = {
 	--(ADDED BY JGC 1-23-20)
 	{"slope", "_outer_onehalf_a"},
 	{"slope", "_outer_onehalf_b"},
+	{"slope", "_inner_onehalf_a"},
+	{"slope", "_inner_onehalf_b"},
 	--(END OF ADDITION)
 }
 

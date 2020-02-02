@@ -16,10 +16,10 @@ for i = 1, #crops do
         if j == crops[i].steps then
             drop = {
                 items = {
-                    {items = {seed}, rarity = 1},
-                    {items = {harvest}, rarity = 1},
-                    {items = {harvest}, rarity = 2},
-                    --{items = {harvest}, rarity = 3},
+                    {items = {seed}, rarity = 1},    --100%
+                    {items = {harvest}, rarity = 1}, --100%
+                    {items = {harvest}, rarity = 2}, -- 50%
+                    {items = {harvest}, rarity = 3}, -- 33%
                 }
             }
         else
