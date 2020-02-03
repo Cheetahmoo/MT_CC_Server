@@ -234,7 +234,6 @@ local function blighted_on_dig(pos, node, player)
         --minetest.chat_send_player(player:get_player_name(), "you are contaminated") --DEBUG
         player:set_attribute("crop_blight:blight_time", minetest:get_gametime()) --Infects player
         minetest.node_dig(pos, node, player)
-        print(dump(node))
         if setting_search(node.name,"scatter_on_dig") then
             if math.random() > 0.75 then
                 scatter_blight(pos)
