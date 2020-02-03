@@ -54,6 +54,12 @@ local normal_nodes = {
 		paramtype2 = "facedir",
 		groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
 		sounds = default.node_sound_wood_defaults(),
+		crop_blight_settings = {
+			infectable_settings = {
+				infected_version = "crop_blight:tree_blighted",
+				chance = 1,
+			},
+		},
 		--craft
 		recipe_type = nil,
 		recipe_recipe = {
@@ -69,6 +75,12 @@ local normal_nodes = {
 		paramtype2 = "facedir",
 		groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
 		sounds = default.node_sound_wood_defaults(),
+		crop_blight_settings = {
+			infectable_settings = {
+				infected_version = "crop_blight:pine_tree_blighted",
+				chance = 1,
+			},
+		},
 		--craft
 		recipe_type = nil,
 		recipe_recipe = {
@@ -104,7 +116,8 @@ for name, def in pairs(normal_nodes) do
 		tiles = def.tiles,
 		paramtype2 = def.paramtype2 or nil,
         groups = def.groups or nil,
-        sounds = def.sounds or nil,
+		sounds = def.sounds or nil,
+		crop_blight_settings = def.crop_blight_settings or nil,
 	})
 
 	--Make cuttable

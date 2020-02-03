@@ -172,3 +172,7 @@ minetest.register_alias("moreblocks:stair_pinewood","moreblocks:stair_pine_wood"
 minetest.register_alias("carts:rail_copper", "carts:rail")
 minetest.register_alias("default:compresed_mese_fragment", "mt_cc_nodes:compresed_mese_fragment")
 minetest.register_alias("moreblocks:jungle_stick", "default:stick")
+
+minetest.register_alias("oil_separation:blight_spot_1", "crop_blight:blight_spot_1")--(1-24-20)
+minetest.register_alias("oil_separation:blight_spot_2", "crop_blight:blight_spot_2")--(1-24-20)
+minetest.register_alias("oil_separation:blight_spot_3", "crop_blight:blight_spot_3")--(1-24-20)

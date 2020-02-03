@@ -325,24 +325,6 @@ strainer.strainable_override("default:river_water_source",{
 ----------------------------------------------------------------------------
 --                              ABM's
 ----------------------------------------------------------------------------
---NODE: STRAINER-- Activates the Cloth Strainer
---[[
-minetest.register_abm({
-    label = "Cloth Strainer-Activate",
-    nodenames = {"strainer:strainer_cloth"},
-    neighbors = {"group:strainable"}, --Group:strainable only used here.
-	interval = update_freq,
-	chance = 1,
-    action = function(pos)
-        local above_node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
-        if minetest.registered_nodes[above_node.name].strainer_settings then
-            local drip_time = minetest.registered_nodes[above_node.name].strainer_settings.strain_time
-            minetest.swap_node(pos,{name ="strainer:strainer_cloth_active"})
-            minetest.get_node_timer(pos):set(drip_time,0)
-        end
-    end,
-})
---]]
 --ACTIVE STRAINER-- Places particles for an active strainer deactivates the strainer
 minetest.register_abm({
     label = "Activate Strainer-Add Drips",
@@ -356,7 +338,7 @@ minetest.register_abm({
             local drip_color = minetest.registered_nodes[above_node.name].strainer_settings.drip_color
             minetest.add_particlespawner({
                 amount = 12,
-                time = update_freq,
+                time = update_freq*2,
                 minpos = vector.add(pos, {x=-0.5,y=-0.6,z=-0.5}),
                 maxpos = vector.add(pos, {x= 0.5,y=-0.6,z= 0.5}),
                 minvel = {x = 0, y = -1.0, z = 0},
@@ -376,7 +358,7 @@ minetest.register_abm({
             if drop_dist > (pos.y - splatter_pos.y) then --splatter should not form in air if max check dist has been reached.
                 minetest.add_particlespawner({
                     amount = 10,
-                    time = update_freq,
+                    time = update_freq*2,
                     minpos = vector.add(splatter_pos, {x=-0.5,y= 0.6,z=-0.5}),
                     maxpos = vector.add(splatter_pos, {x= 0.5,y= 0.6,z= 0.5}),
                     minvel = {x =-2.5, y = 1, z =-2.5},

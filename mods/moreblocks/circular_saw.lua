@@ -31,7 +31,7 @@ circular_saw.cost_in_microblocks = {
 	4, 2, 6, 7, 3, 7, 7, 4,
 	8, 3, 2, 6, 2, 1, 3, 4,
 	--(ADDED BY JGC)
-	4,2
+	4,2,6,4
 	--(END OF ADDITION)
 }
 
@@ -92,6 +92,8 @@ circular_saw.names = {
 	--(ADDED BY JGC 1-23-20)
 	{"slope", "_outer_onehalf_a"},
 	{"slope", "_outer_onehalf_b"},
+	{"slope", "_inner_onehalf_a"},
+	{"slope", "_inner_onehalf_b"},
 	--(END OF ADDITION)
 }
 
@@ -373,7 +375,8 @@ function circular_saw.on_construct(pos)
 	local meta = minetest.get_meta(pos)
 	local fancy_inv = default.gui_bg..default.gui_bg_img..default.gui_slots
 	meta:set_string(
-		"formspec", "size[11,10]"..fancy_inv..
+		--"formspec", "size[11,10]"..fancy_inv..
+		"formspec", "size[11,11]"..fancy_inv.. --increased size of formspec (JGC 1-29-20)
 		"label[0,0;" ..F(S("Input\nmaterial")).. "]" ..
 		"list[current_name;input;1.5,0;1,1;]" ..
 		"label[0,1;" ..F(S("Left-over")).. "]" ..
@@ -382,8 +385,10 @@ function circular_saw.on_construct(pos)
 		"list[current_name;recycle;1.5,2;1,1;]" ..
 		"field[0.3,3.5;1,1;max_offered;" ..F(S("Max")).. ":;${max_offered}]" ..
 		"button[1,3.2;1,1;Set;" ..F(S("Set")).. "]" ..
-		"list[current_name;output;2.8,0;8,6;]" ..
-		"list[current_player;main;1.5,6.25;8,4;]" ..
+		--"list[current_name;output;2.8,0;8,6;]" ..
+		"list[current_name;output;3,0;8,7;]" .. --makes output inventory larger (JGC 1-29-20)
+		--"list[current_player;main;1.5,6.25;8,4;]" ..
+		"list[current_player;main;1.5,7.25;8,4;]" .. --moves player inventory lower on the formspec (JGC 1-29-20)
 		"listring[current_name;output]" ..
 		"listring[current_player;main]" ..
 		"listring[current_name;input]" ..
@@ -402,7 +407,8 @@ function circular_saw.on_construct(pos)
 	inv:set_size("input", 1)    -- Input slot for full blocks of material x.
 	inv:set_size("micro", 1)    -- Storage for 1-7 surplus microblocks.
 	inv:set_size("recycle", 1)  -- Surplus partial blocks can be placed here.
-	inv:set_size("output", 6*8) -- 6x8 versions of stair-parts of material x.
+	--inv:set_size("output", 6*8) -- 6x8 versions of stair-parts of material x.
+	inv:set_size("output", 7*8) -- 6x8 versions of stair-parts of material x. --makes metadata output inventory larger (JGC 1-29-20)
 
 	circular_saw:reset(pos)
 end

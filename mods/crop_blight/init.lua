@@ -1,0 +1,35 @@
+----------------------------------------------------------------------------
+--                   CROP BLIGHT MOD INIT
+----------------------------------------------------------------------------
+crop_blight = {} --Establish "crop_blight" name space
+
+
+----------------------------------------------------------------------------
+--                          SETTINGS
+----------------------------------------------------------------------------
+--How often to check if player is near a contamination node
+crop_blight.check_interval = 4
+
+--Time a player will be infected after contact with a contaminating node
+crop_blight.player_blighted_time = 60
+
+--How often a player scatters blight while infected
+crop_blight.player_scatter_interval = 10
+
+--Distance around a player which might be reached by blight when player is infected
+crop_blight.scatter_dist_max = 8 
+crop_blight.scatter_dist_min = 6
+
+--Time it takes for an infected node to infect its neighbor
+crop_blight.spread_time_max = 10
+crop_blight.spread_time_min = 3
+
+
+----------------------------------------------------------------------------
+--                           LOAD FILES
+----------------------------------------------------------------------------
+crop_blight.path = minetest.get_modpath("crop_blight")
+
+dofile(crop_blight.path .. "/functions.lua")
+dofile(crop_blight.path .. "/nodes.lua")
+dofile(crop_blight.path .. "/overrides.lua")
