@@ -18,6 +18,7 @@ crop_blight.register_blighted_node("oil_separation:seed_paste_dry_blighted", {
     sounds = default.node_sound_sand_defaults(),
     crop_blight_settings = {
         scatter_on_dig = true,
+        contaminates_player = true,
     }
 })
 
