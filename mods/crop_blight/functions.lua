@@ -185,7 +185,7 @@ local function scatter_blight(pos)
         path_by_lightlevel(pos, math.random(crop_blight.scatter_dist_min, crop_blight.scatter_dist_max), true),  --find by low light level
     }
     for i = 1, #blight_pos do
-        --minetest.set_node(blight_pos[i],{name = "default:obsidian_glass"})
+        --minetest.set_node(blight_pos[i],{name = "default:obsidian_glass"}) --DEBUG
         infect_neighbors(blight_pos[i])
         for j = 1, 6 do --first 6 neighbors
             local chk_pos = vector.add(blight_pos[i], neighbors[j])
@@ -300,7 +300,7 @@ minetest.register_globalstep(function(dtime)
 
         if infected_status then
             local at_feet  = minetest.get_node(player_pos)
-            local under_feet = minetest.get_node({x=player_pos.x, y=player_pos.y-1, z=player_pos.z})
+            local under_feet = minetest.get_node({x=player_pos.x, y=player_pos.y-0.5, z=player_pos.z})
             local infected_time = minetest:get_gametime() - infected_status
 
             --Decontaminate Player
