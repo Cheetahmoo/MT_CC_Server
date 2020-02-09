@@ -286,6 +286,7 @@ minetest.register_globalstep(function(dtime)
     --minetest.chat_send_all("checking for contamination, decontamination, or spread") --DEBUG
     for i, player in ipairs(minetest.get_connected_players()) do --for all players
         local player_pos = player:getpos()
+        player_pos.y = math.floor(player_pos.y + 1)
         local infected_status = player:get_attribute("crop_blight:blight_time")
         local near_blight = minetest.find_node_near(player_pos, 1, contaminating_nodes, true) --true means check pos
 
@@ -300,7 +301,7 @@ minetest.register_globalstep(function(dtime)
 
         if infected_status then
             local at_feet  = minetest.get_node(player_pos)
-            local under_feet = minetest.get_node({x=player_pos.x, y=player_pos.y-0.5, z=player_pos.z})
+            local under_feet = minetest.get_node({x=player_pos.x, y=player_pos.y-1, z=player_pos.z})
             local infected_time = minetest:get_gametime() - infected_status
 
             --Decontaminate Player
