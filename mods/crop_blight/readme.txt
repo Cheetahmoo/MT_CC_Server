@@ -17,7 +17,8 @@ crop_blight_settings = {
                                         the node. By default, blight can pass through if light can pass through.
     contaminates_player   = BOOL      --Default is false/nil
     decontaminates_player = BOOL      --Default is false/nil
-    scatter_on_dig        = BOOL      --Default is false/nil. If true, node will have a 1 in 2 chance of scattering blight when dug.
+    scatter_on_dig        = BOOL      --Default is false/nil. If true, node will have a 1 in 2 chance of scattering blight when dug. (Must have
+                                        "blight_on_dig" assigned as on_dig function)
     infectable_settings   = {         --If 'infectable_settings' exist, node is an infectable node and must have the following settings:
         chance            = NUMBER    -- 1/chance = chance that node will infect when exposed to blight)
         infected_version  = NODE NAME --Infected version of the infectable node)

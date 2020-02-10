@@ -36,7 +36,7 @@ stairsplus.register_single = function(category, alternate, info, modname, subnam
 	def.place_param2 = nil
 
 	-- Darken light sources slightly to make up for their smaller visual size
-	def.light_source = math.max(0, (def.light_source or 0) - 1)
+	def.light_source = math.max(0, (def.light_source or 0))-- - 1) --(CHANGE BY JGC 2-9-20)
 
 	def.on_place = minetest.rotate_node
 	def.groups = stairsplus:prepare_groups(fields.groups)

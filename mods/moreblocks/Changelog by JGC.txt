@@ -9,3 +9,5 @@ defs.lua
     added new nodes' mesh name to stairsplus.defs{}
 registrations.lua
     in code which makes most default nodes cuttable, added a check to be sure default node has been registered
+stairsplus>common.lua
+    commented out line which causes cut blocks to have a reduced light output. Line 39 should read: "def.light_source = math.max(0, (def.light_source or 0) - 1)"

@@ -29,7 +29,7 @@ for i, row in ipairs(porcelain_colors) do
 		description = desc.." Stained Clay",
 		tiles = {"default_clay.png^porcelain_stained_clay_"..color..".png"},
 		groups = {crumbly = 3},
-		sounds = default.node_sound_dirt_defaults(),
+        sounds = default.node_sound_dirt_defaults(),
     })
 
     minetest.register_craft({
@@ -57,6 +57,7 @@ for i, row in ipairs(porcelain_colors) do
         tiles = porcelain_def.tiles,
         groups = {cracky = 3},
         sounds = porcelain_def.sounds,
+        crop_blight_settings = {reverse_spot_default = true}, --Blight will not form on porcelain
     })
 
     minetest.register_craft({

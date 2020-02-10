@@ -68,8 +68,8 @@ local function place_blight_spot(pos)
     local under_def = minetest.registered_nodes[minetest.get_node(under_pos).name]
     local node = minetest.get_node(pos)
     if under_def then
-        local condition_1 = (under_def.drawtype == "normal" and setting_search(under_def.name, "hosts_spot") == false)
-        local condition_2 = (not under_def.drawtype == "normal" and setting_search(under_def.name, "hosts_spot") == true)
+        local condition_1 = (under_def.drawtype == "normal" and setting_search(under_def.name, "reverse_spot_default") == false)
+        local condition_2 = (not(under_def.drawtype == "normal") and setting_search(under_def.name, "reverse_spot_default") == true)
         if node.name == "air" and (condition_1 or condition_2) then
             minetest.set_node(pos,{name = "crop_blight:blight_spot_"..math.random(1,3), param2 = 1}) --pick one of the 3 spot designs
             return true --Spot placed
