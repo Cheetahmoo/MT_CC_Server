@@ -21,8 +21,8 @@ crop_blight.scatter_dist_max = 8
 crop_blight.scatter_dist_min = 3
 
 --Time it takes for an infected node to infect its neighbor
-crop_blight.spread_time_max = 10
-crop_blight.spread_time_min = 3
+crop_blight.spread_time_max = 20
+crop_blight.spread_time_min = 8
 
 
 ----------------------------------------------------------------------------
