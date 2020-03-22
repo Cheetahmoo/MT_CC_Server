@@ -30,9 +30,16 @@ local function Add_snow_above(_pos, addBlock, replaceNods)
 			return
 		end
 
+		
+
 		local hitNodeAbove = minetest.get_node(hit.above);
 		local name = minetest.get_node(hit.above).name
 		local hitName = minetest.get_node(hitNodePos).name
+
+		if get_nodedef_field(hitName, "drawtype") ~= "normal" then
+			return
+		end
+
 		local hitNameBelow = minetest.get_node({x=hit.above.x, y=hit.above.y-2, z=hit.above.z}).name
 
 		if minetest.get_node_group(hitName, "no_snow_cover") == 0 then -- If node has group no_snow_cover then don't place snow on top
@@ -240,21 +247,9 @@ if seasons.season == "winter" then
 				else
 					minetest.set_node(pos, {name = "default:ice"})
 				end
-				--Add_snow_above(pos)
 			end
 		end
 	})
-
-
-	--[[minetest.register_lbm({ -- add Snow Ontop Of leaves
-		name = "seasons:change_leaves_w",
-		nodenames = {"group:leaves"},
-		run_at_every_load = true,
-		action = function(pos, node)
-			Add_snow_above(pos)
-		end
-	})--]]
-	
 	
 	
 	minetest.register_abm({-- Places snow ontop of the soil --
