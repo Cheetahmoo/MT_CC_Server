@@ -336,7 +336,7 @@ end)
 -- 3) will infect the player when dug
 -- 4) will ocasionally scatter blight (controled by group membership and an ABM)
 crop_blight.register_blighted_node = function(name,def)
-    def.groups.blighted = 1 --Required group membership
+    
     minetest.register_node(name, {
         description = def.description,
         drawtype = def.drawtype,
@@ -379,7 +379,7 @@ end
 --GROUP: BLIGHTED-- Causes blighted nodes to ocasionally spray more blight
 minetest.register_abm({
     label = "Reactivate Blighted Nodes",
-    nodenames = {"group:blighted"},
+    nodenames = {"group:scatters_blight"},
     interval = 31,
     chance = 270,
     action = function(pos)

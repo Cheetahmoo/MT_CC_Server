@@ -61,8 +61,9 @@ Nodes registered using the crop_blight.register_blighted_node are assigned four 
 1) they will infect infectable neightbors afew seconds after construction
 2) they will infect the player
 3) they will infect the player when dug
-4) they will ocasionally scatter blight (controled by group membership and an ABM)
-These are the default properties. All can be altered except 4, which is manditory. This registration
+4) they will NOT ocasionally scatter blight (controled by group 'scatters_blight' membership and an ABM)
+   (Infected soils and Artist's Fungus will ocasionally scaatter blight)
+These are the default properties. All can be altered. This registration
 function is intended for registering the infected versions of infectable nodes.
 
 If a player is contaminated and scatters blight into a field of wheat, the following takes place:
@@ -85,12 +86,20 @@ I have a new infected version, how do I make it work?
 I don't like property (1) given by crop_blight.register_blighted_node().
     --Write a different on_timer property. Try on_timer = function() return false end, (see artist's fungus registration)
 I don't like property (2) given by crop_blight.register_blighted_node().
-    --In the definition used by crop_blight.register_blighted_node(), set contaminates_player = false
+    --In the definition used by crop_blight.register_blighted_node(), set crop_blight_settings = {contaminates_player = false}
 I don't like property (3) given by crop_blight.register_blighted_node().
     --Write a different on_dig property. Try on_dig = function(pos, node, player) minetest.node_dig(pos, node, player) end,
 I don't like property (4) given by crop_blight.register_blighted_node().
-    --Don't use crop_blight.register_blighted_node().
+    --Add 'scatters_blight = 1' to the groups definition.
 
 DEPENDANCIES
 Requires: default
 optional: moreblocks, doors, home_mod, walls, seasons, farming, flowers (adds overrides for these mods)
+
+PROPERTIES OF SOME NODES ADDED BY THIS MOD
+Blighted Logs will infect their neightbors on construction, will not scatter more blight, will not infect the player,  
+    will not infect the player when dug.
+Artists fungus will not infect its neighbors on construction, will scatter more blight, will not infect the player, will
+    not infect the player when dug.
+Blighted farming soil will infect its neighbors on construction, will scatter more blight, will infect the player,
+    will infect the player when dug.

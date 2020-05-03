@@ -56,7 +56,7 @@ crop_blight.register_blighted_node("crop_blight:soil_wet_blighted", {
         "default_dirt.png^farming_soil_wet.png", --^crop_blight_farm_top.png",
         "default_dirt.png^farming_soil_wet_side.png^crop_blight_farm_side.png",
     },
-    groups = {crumbly = 3, not_in_creative_inventory = 1, soil=3, grassland = 1, farming_soil = 1},
+    groups = {crumbly = 3, not_in_creative_inventory = 1, soil=3, grassland = 1, farming_soil = 1, scatters_blight = 1},
     sounds = default.node_sound_dirt_defaults(),
     on_construct = function(pos)
         minetest.get_node_timer(pos):start(math.random(crop_blight.spread_time_min,crop_blight.spread_time_max))
@@ -81,7 +81,7 @@ crop_blight.register_blighted_node("crop_blight:desert_sand_soil_wet_blighted", 
         "farming_desert_sand_soil_wet.png", 
         "farming_desert_sand_soil_wet_side.png^crop_blight_farm_side.png"
     },
-    groups = {crumbly = 3, not_in_creative_inventory = 1, soil=3, desert = 1},
+    groups = {crumbly = 3, not_in_creative_inventory = 1, soil=3, desert = 1, scatters_blight = 1},
     sounds = default.node_sound_sand_defaults(),
     on_construct = function(pos)
         minetest.get_node_timer(pos):start(math.random(crop_blight.spread_time_min,crop_blight.spread_time_max))
@@ -104,7 +104,7 @@ crop_blight.register_blighted_node("crop_blight:tree_blighted", {
     },
 	paramtype2 = "facedir",
 	is_ground_content = false,
-    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1, blighted_tree = 1},
+    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1},
     drop = 'default:wood',
     sounds = default.node_sound_wood_defaults(),
     on_place = minetest.rotate_node,
@@ -114,6 +114,8 @@ crop_blight.register_blighted_node("crop_blight:tree_blighted", {
             place_artists_fungus(pos)
         end
     end,
+    on_dig = function(pos, node, player) minetest.node_dig(pos, node, player) end,
+    crop_blight_settings = {contaminates_player = false},
 })
 
 --Blighted Pine Tree
@@ -132,7 +134,7 @@ crop_blight.register_blighted_node("crop_blight:pine_tree_blighted", {
     },
 	paramtype2 = "facedir",
 	is_ground_content = false,
-    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1, blighted_tree = 1},
+    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1},
     drop = 'default:pine_wood',
 	sounds = default.node_sound_wood_defaults(),
     on_place = minetest.rotate_node,
@@ -142,6 +144,8 @@ crop_blight.register_blighted_node("crop_blight:pine_tree_blighted", {
             place_artists_fungus(pos)
         end
     end,
+    on_dig = function(pos, node, player) minetest.node_dig(pos, node, player) end,
+    crop_blight_settings = {contaminates_player = false},
 })
 
 --Blighted Acacia Tree
@@ -160,7 +164,7 @@ crop_blight.register_blighted_node("crop_blight:acacia_tree_blighted", {
     },
 	paramtype2 = "facedir",
 	is_ground_content = false,
-    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1, blighted_tree = 1},
+    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1},
     drop = 'default:acacia_wood',
 	sounds = default.node_sound_wood_defaults(),
     on_place = minetest.rotate_node,
@@ -170,6 +174,8 @@ crop_blight.register_blighted_node("crop_blight:acacia_tree_blighted", {
             place_artists_fungus(pos)
         end
     end,
+    on_dig = function(pos, node, player) minetest.node_dig(pos, node, player) end,
+    crop_blight_settings = {contaminates_player = false},
 })
 
 --Blighted Aspen Tree
@@ -188,7 +194,7 @@ crop_blight.register_blighted_node("crop_blight:aspen_tree_blighted", {
     },
 	paramtype2 = "facedir",
 	is_ground_content = false,
-    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1, blighted_tree = 1},
+    groups = {choppy = 3, oddly_breakable_by_hand = 1, flammable = 2, not_in_creative_inventory = 1},
     drop = 'default:aspen_wood',
 	sounds = default.node_sound_wood_defaults(),
     on_place = minetest.rotate_node,
@@ -198,6 +204,8 @@ crop_blight.register_blighted_node("crop_blight:aspen_tree_blighted", {
             place_artists_fungus(pos)
         end
     end,
+    on_dig = function(pos, node, player) minetest.node_dig(pos, node, player) end,
+    crop_blight_settings = {contaminates_player = false},
 })
 
 --Blighted Wheat short
@@ -283,7 +291,7 @@ crop_blight.register_blighted_node("crop_blight:artists_fungus", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {snappy = 3, flammable = 3, not_in_creative_inventory=1, attached_node=1},
+	groups = {snappy = 3, flammable = 3, not_in_creative_inventory=1, attached_node=1, scatters_blight = 1},
     sounds = default.node_sound_leaves_defaults(),
     node_box = {
 		type = "fixed",
@@ -319,4 +327,6 @@ crop_blight.register_blighted_node("crop_blight:artists_fungus", {
     on_timer = function()
         return false
     end,
+    on_dig = function(pos, node, player) minetest.node_dig(pos, node, player) end,
+    crop_blight_settings = {contaminates_player = false},
 })
