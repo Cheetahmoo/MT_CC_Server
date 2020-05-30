@@ -2,6 +2,7 @@
 local addsnowBlock = true
 seasons.snowstormSnow = true
 
+local keeps_cold = {"default:ice", "seasons:flowing_ice", "seasons:ice", "farming:straw"}
 local flowers = {"flowers:rose","flowers:tulip","flowers:dandelion_yellow","flowers:geranium","flowers:viola", "flowers:dandelion_white"} 
 local flowersDry = {"flowers:rose_dry","flowers:tulip_dry","flowers:dandelion_yellow_dry","flowers:geranium_dry","flowers:viola_dry", "flowers:dandelion_white_dry"} 
 
@@ -355,31 +356,24 @@ if seasons.season == "spring" or seasons.season == "summer" or seasons.season ==
 			end
 		end
 	})
-	minetest.register_lbm({-- Melt All Of Winter
-		name = "seasons:remove_all_snow_ice",
-		nodenames = {"default:snow", "default:snowblock"},
-		run_at_every_load = true,
-		action = function(pos, node)
-			--Checks to see if the position of the node to add snow to is above the min height
-			if pos.y <= seasons.minHeight then
-				return
-			end
-			if node.name == "default:ice" then
-				minetest.set_node(pos, {name = "default:water_source"})
-			else
-				minetest.set_node(pos, {name = "air"})
-			end
-		end
-	})
+	
 	minetest.register_lbm({-- Melt All Of Winter
 		name = "seasons:remove_all_ice",
-		nodenames = {"default:ice", "seasons:flowing_ice", "seasons:ice"},
+		nodenames = {"default:ice", "seasons:flowing_ice", "seasons:ice", "default:snow", "default:snowblock"},
 		run_at_every_load = true,
 		action = function(pos, node)
+			
 			--Checks to see if the position of the node to add snow to is above the min height
 			if pos.y <= seasons.minHeight then
 				return
 			end
+			
+			--If surrounded (almost) by insulation, don't melt
+			local near_nodes = minetest.find_nodes_in_area({x = pos.x-1, y = pos.y-1, z = pos.z-1}, {x = pos.x+1, y = pos.y+1, z = pos.z+1}, keeps_cold)
+			if #near_nodes >= 14 then
+				return
+			end
+
 			if node.name == "default:ice" then
 				minetest.set_node(pos, {name = "default:water_source"})
 			elseif node.name == "seasons:flowing_ice" then
@@ -391,6 +385,7 @@ if seasons.season == "spring" or seasons.season == "summer" or seasons.season ==
 			end
 		end
 	})
+
 	minetest.register_lbm({-- Melt All Of Winter
 		name = "seasons:remove_snow_with_dirt",
 		nodenames = {"default:dirt_with_snow"},

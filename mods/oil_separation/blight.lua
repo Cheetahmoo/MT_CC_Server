@@ -14,7 +14,7 @@ crop_blight.register_blighted_node("oil_separation:seed_paste_dry_blighted", {
 	description = "Blighted Dry Seed Paste",
     drop = "oil_separation:seed_paste_dry",
     tiles = {"oil_separation_seed_paste_dry.png^oil_separation_blight.png"},
-    groups = {crumbly = 3, falling_node = 1, not_in_creative_inventory = 1, flammable = 1, scatters_blight = 1},
+    groups = {crumbly = 3, falling_node = 1, not_in_creative_inventory = 1, flammable = 1, scatters_blight = 1, waste = 1},
     sounds = default.node_sound_sand_defaults(),
     crop_blight_settings = {
         scatter_on_dig = true,

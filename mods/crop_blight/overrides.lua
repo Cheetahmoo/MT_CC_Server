@@ -47,7 +47,7 @@ local crop_blight_settings_by_name = {
     ["moreblocks:trap_glow_glass"]       = {reverse_spot_default = false, reverse_seal_default = true},
     ["moreblocks:trap_super_glow_glass"] = {reverse_spot_default = false, reverse_seal_default = true},
     ["default:obsidian_glass"]           = {reverse_spot_default = false, reverse_seal_default = true},
-    ["default:glass"]                    = {reverse_spot_default = true, reverse_seal_default = true},
+    ["default:glass"]                    = {reverse_spot_default = false, reverse_seal_default = true},
     ["default:meselamp"]                 = {reverse_spot_default = false, reverse_seal_default = true, decontaminates_player = true,},
     --Water 
     ["default:water_source"]             = {reverse_spot_default = false, reverse_seal_default = true, decontaminates_player = true,},

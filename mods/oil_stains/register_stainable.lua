@@ -29,12 +29,12 @@ end
 
 --Make White Wool stainable (while keeping craft)
 local white_wool_col = {
-    ["default:clay"] = {
+    ["wool:white"] = {
         ["red"]    = "wool:pink",
         ["blue"]   = "wool:cyan",
         ["yellow"] = "wool:yellow",
-        ["black"]  = "wool:white",
-        ["white"]  = "wool:grey",
+        ["black"]  = "wool:grey",
+        ["white"]  = "wool:white",
     },
 }
 for name, effects in pairs(white_wool_col) do

@@ -15,6 +15,9 @@ local stain_time_min = 5
 --REGISTER STAINABLE NODE-- Build directory indicating how stain effects a stainable node
 local staining_directory = {}
 oil_stains.register_stainable_node = function(name, def)
+    if minetest.registered_nodes[name] then
+        minetest.registered_nodes[name].groups["catches_oil"] = 1
+    end
     staining_directory[name] = {}
     for dye, node in pairs(def) do
         staining_directory[name]["oil_stains:stain_"..dye.."_source"] = node
@@ -39,6 +42,7 @@ local dye_to_stain_settings = { -- which dye is used to create which stain color
     ["dye:pink"]       = "red",
     ["dye:dark_green"] = "blue",
 }
+--[[ OLD DELETE IF NO BUGS FOUND IN "register on punch" below 
 local function dye_on_use(itemstack, user, pointed_thing)
     --Pointed_thing checks 
     if not pointed_thing or pointed_thing.type ~= "node" then
@@ -65,6 +69,40 @@ local function dye_on_use(itemstack, user, pointed_thing)
         return itemstack
     end
 end
+--]]
+
+--USE DYE TO STAIN THE OIL
+minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
+    if not (minetest.get_item_group(puncher:get_wielded_item():get_name(),"dye") >= 1) then
+        return
+    end
+
+    if not pointed_thing or pointed_thing.type ~= "node" then
+		return
+    end
+
+    local node = minetest.get_node(pointed_thing.under)
+	if not (node.name == "oil_separation:seed_oil_source") then
+		return
+    end
+
+    --Protection check TODO: check protection
+    if minetest.is_protected(pointed_thing.under, puncher:get_player_name()) then
+		minetest.record_protection_violation(pointed_thing.under, puncher:get_player_name())
+		return
+    end
+
+    --Change oil to stain
+    local itemstack = puncher:get_wielded_item()
+    local wielded_dye = itemstack:get_name()
+    local stain_name  = "oil_stains:stain_"..dye_to_stain_settings[wielded_dye].."_source"
+    if minetest.registered_nodes[stain_name] then
+        minetest.set_node(pointed_thing.under,{name = stain_name})
+        itemstack:take_item()
+        puncher:set_wielded_item(itemstack)
+        return itemstack
+    end
+end)
 
 --STAIN ON TIMER-- stain soaks into lower material
 local function stain_on_timer(pos, elapsed)
@@ -96,31 +134,31 @@ end
 local stains = {
     { --RED
     name = "oil_stains:stain_red", desc = "Red Stain", added_dye = "red", animatedS = "oil_stains_stain_red_source_animated.png", 
-    animatedF = "oil_stains_stain_red_flowing_animated.png", bucket = "oil_stains_stain_red_bucket.png",
+    animatedF = "oil_stains_stain_red_flowing_animated.png", bucket = "oil_stains_stain_red_bucket.png", block = "oil_stains_stain_red_block.png",
     post_effect_color = {a = 100, r = 200, g = 0, b = 0}
     },
     
     { --BLUE
     name = "oil_stains:stain_blue", desc = "Blue Stain", added_dye = "blue", animatedS = "oil_stains_stain_blue_source_animated.png",
-    animatedF = "oil_stains_stain_blue_flowing_animated.png", bucket = "oil_stains_stain_blue_bucket.png",
+    animatedF = "oil_stains_stain_blue_flowing_animated.png", bucket = "oil_stains_stain_blue_bucket.png", block = "oil_stains_stain_blue_block.png",
     post_effect_color = {a = 100, r = 0, g = 0, b = 200}
     },
     
     { --YELLOW
     name = "oil_stains:stain_yellow", desc = "Yellow Stain", added_dye = "yellow", animatedS = "oil_stains_stain_yellow_source_animated.png",
-    animatedF = "oil_stains_stain_yellow_flowing_animated.png", bucket = "oil_stains_stain_yellow_bucket.png",
+    animatedF = "oil_stains_stain_yellow_flowing_animated.png", bucket = "oil_stains_stain_yellow_bucket.png", block = "oil_stains_stain_yellow_block.png",
     post_effect_color = {a = 100, r = 150, g = 200, b = 0}
     },
     
     { --BLACK
     name = "oil_stains:stain_black", desc = "Black Stain", added_dye = "black", animatedS = "oil_stains_stain_black_source_animated.png",
-    animatedF = "oil_stains_stain_black_flowing_animated.png", bucket = "oil_stains_stain_black_bucket.png",
+    animatedF = "oil_stains_stain_black_flowing_animated.png", bucket = "oil_stains_stain_black_bucket.png", block = "oil_stains_stain_black_block.png",
     post_effect_color = {a = 100, r = 0, g = 0, b = 0}
     },
 
     { --white
     name = "oil_stains:stain_white", desc = "White Stain", added_dye = "white", animatedS = "oil_stains_stain_white_source_animated.png",
-    animatedF = "oil_stains_stain_white_flowing_animated.png", bucket = "oil_stains_stain_white_bucket.png",
+    animatedF = "oil_stains_stain_white_flowing_animated.png", bucket = "oil_stains_stain_white_bucket.png", block = "oil_stains_stain_white_block.png",
     post_effect_color = {a = 100, r = 0, g = 0, b = 0}
     },
 }
@@ -162,7 +200,7 @@ for i=1, #stains do
                     type = "vertical_frames",
                     aspect_w = 16,
                     aspect_h = 16,
-                    length = 0.8,
+                    length = 4,
                 },
             },
             {
@@ -172,7 +210,7 @@ for i=1, #stains do
                     type = "vertical_frames",
                     aspect_w = 16,
                     aspect_h = 16,
-                    length = 0.8,
+                    length = 4,
                 },
             },
         },
@@ -192,6 +230,9 @@ for i=1, #stains do
             residual = "dye:"..stains[i].added_dye,
             strain_time = 10,
             drip_color = "yellow",
+        },
+        oil_block_settings = {
+            texture = {name = stains[i].block},
         },
     })
 end
