@@ -11,10 +11,13 @@ oil_separation = {} --Establish "oil_separation" name space
 
 --The "separation_time" variable controls how long before oil separates from paste.
 --Used in two places in the "seed_paste_oily" node registration.
-oil_separation.separation_time = 40 --Default (300)
+oil_separation.separation_time = 50 --Default (50)
 
 --Chance that oily paste will not dry out after releasing oil near fire. Read as "1 out of fire_chance"
 oil_separation.fire_chance = 2
+
+--Chance that lava or ice will be 'used-up' after affecting paste/oil. Read as "1 out of energy_loss_chance"
+oil_separation.energy_loss_chance = 20
 
 
 ----------------------------------------------------------------------------

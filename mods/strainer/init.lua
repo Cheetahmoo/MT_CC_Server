@@ -213,7 +213,7 @@ minetest.register_node("strainer:strainer_cloth", {
 	walkable = true,
     buildable_to = false,
     sounds = default.node_sound_wood_defaults(),
-	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 3, wood = 1},
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 3, wood = 1, catches_oil = 1},
     node_box = strainer_nodebox,
     selection_box = strainer_selection_box,
     on_construct = function(pos)
@@ -243,7 +243,7 @@ minetest.register_node("strainer:strainer_cloth_active", {
     buildable_to = false,
     sounds = default.node_sound_wood_defaults(),
     drop = "strainer:strainer_cloth_broken",
-	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 3, wood = 1, not_in_creative_inventory = 1},
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 3, wood = 1, not_in_creative_inventory = 1, catches_oil = 1},
     node_box = strainer_nodebox,
     selection_box = strainer_selection_box,
     on_timer = active_on_timer,

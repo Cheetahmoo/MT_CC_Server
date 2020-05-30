@@ -22,6 +22,7 @@ the seed paste. If the STRAINER mod is enabled, the strainer can be used to extr
    can collect more than one oil source from the node.
 
 MOD FUNCTION:
+Nodes belonging to "group:catches_oil" prevent horizontal movement of oil. 
 
 
 DEPENDANCIES

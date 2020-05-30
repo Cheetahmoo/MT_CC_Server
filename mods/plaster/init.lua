@@ -62,7 +62,7 @@ for i, color in ipairs(plaster_colors) do
 	--Register Plaster
 	minetest.register_node(def.name, {
 		description = def.description,
-		inventory_image = "[inventorycube{"..def.inv_img.."&[sheet:4x4:1,1{"..def.inv_img.."&[sheet:4x4:1,1{"..def.inv_img.."&[sheet:4x4:1,1{",
+		inventorycube =  minetest.inventorycube(def.inv_img.."&[sheet:4x4:1,1", def.inv_img.."&[sheet:4x4:1,1", def.inv_img.."&[sheet:4x4:1,1"),
         tiles = def.tiles,
         groups = {crumbly = 2},
         sounds = def.sounds,

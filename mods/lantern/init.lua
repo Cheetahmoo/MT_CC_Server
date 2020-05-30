@@ -28,8 +28,9 @@ minetest.register_node("lantern:lantern", {
 minetest.register_craft({
 	output = 'lantern:lantern',
 	recipe = {
-		{'default:copper_ingot','default:torch','default:copper_ingot'},		
-		{'','default:copper_ingot',''},
+		{'default:copper_ingot','default:torch',       'default:copper_ingot'},		
+		{'default:glass',       'oil_separation:seed_oil_block','default:glass'},
+		{'default:copper_ingot','oil_separation:seed_oil_block','default:copper_ingot'},
 	},
 	--replacements = {{"refinement:bottle_seed_oil", "vessels:steel_bottle"}},
 })	

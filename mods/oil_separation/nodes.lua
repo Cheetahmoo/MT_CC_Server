@@ -10,23 +10,34 @@ local neighbors = { --Neighbor definition
     {x= 0,y= 1,z= 0}, --Above  (6)
 }
 
-
 ----------------------------------------------------------------------------
 --                          NODE FUNCIONALITY
 ----------------------------------------------------------------------------
---IS FIRE HEATING-- Detects if fire is near but not touching
-local function is_fire_heating(pos)
-    if not minetest.find_node_near(pos, 1, "fire:basic_flame") then --If node is not on fire
-        for i=1, 5 do --don't check up
-            local far_nei = vector.multiply(neighbors[i], 2)
-            local chk_pos = vector.add(pos, far_nei)
-            local chk_node = minetest.get_node(chk_pos)
-            if chk_node.name == "fire:basic_flame" then
-                return true
-            end
+--IS HEATED-- Detects if node is heated
+oil_separation.is_heated = function(pos, depth)
+    local max_pos = {x=pos.x+2, y=pos.y,       z=pos.z+2}
+    local min_pos = {x=pos.x-2, y=pos.y-depth, z=pos.z-2}
+    local near_heat = minetest.find_nodes_in_area(max_pos, min_pos, {"fire:basic_flame", "default:lava_source"})
+    if #near_heat >= 1 then
+        return true
+    else
+        return false
+    end
+end
+
+--COOL LAVA-- Cools Lava to stone in area
+oil_separation.cool_lava = function(pos, depth)
+    local loss_chance = 1/oil_separation.energy_loss_chance
+    if math.random() <= loss_chance then
+        local max_pos = {x=pos.x+2, y=pos.y,       z=pos.z+2}
+        local min_pos = {x=pos.x-2, y=pos.y-depth, z=pos.z-2}
+        local lava_pos = minetest.find_nodes_in_area(max_pos, min_pos, {"default:lava_source"})
+        if lava_pos then
+            local dest_pos = lava_pos[math.random(1, #lava_pos)]
+            minetest.set_node(dest_pos, {name = "default:stone"})
+            minetest.sound_play("default_cool_lava", {pos = pos, max_hear_distance = 16, gain = 0.25})
         end
     end
-    return false
 end
 
 --OILY PASTE ON TIMER-- Controls oil separation when touching watersource (Strainer separation is controled by "strainer_settings")
@@ -37,10 +48,12 @@ local function seed_paste_oily_on_timer(pos) --This functionality is on a timer,
     local under_node = minetest.get_node({x=pos.x, y=pos.y-1, z=pos.z})
     if under_node.name == "strainer:strainer_cloth_active" then --If strainer, water does not separate.
         return true
-    elseif (above_node.name == "default:water_source" or above_node.name == "default:river_water_source") and is_fire_heating(pos) then --Separates in water if heated
-        local chance = 1/oil_separation.fire_chance
+    elseif (above_node.name == "default:water_source" or above_node.name == "default:river_water_source" or above_node.name == "oil_separation:seed_oil_source") and
+           oil_separation.is_heated(pos,2) then --Separates in water if heated (oil will be replaced if there is not water above the oily node)
+        local chance = (1/oil_separation.fire_chance)+0.05
         minetest.set_node(above_pos,{name = "oil_separation:seed_oil_source"})
-        if math.random() <= chance then
+        oil_separation.cool_lava(pos,2) --has chance of making lava cool to stone
+        if math.random() > chance then
             minetest.set_node(pos,{name = "oil_separation:seed_paste_dry"})
             return false
         end
@@ -48,17 +61,32 @@ local function seed_paste_oily_on_timer(pos) --This functionality is on a timer,
     return true
 end
 
---NODE SOUND SPLAT-- Sounds for paste and waste  
+--NODE SOUND SPLAT-- Sounds for oily paste  
 oil_separation.node_sound_splat = function(table)
 	table = table or {}
 	table.footstep = table.footstep or
-            {name = "oil_separation_step", gain = 0.4}
+            {name = "oil_separation_splat_step", gain = 0.4}
     table.dig = table.dig or
-			{name = "oil_separation_dig_paste", gain = 1}
+			{name = "oil_separation_splat_dig", gain = 1}
 	table.dug = table.dug or
-			{name = "oil_separation_dug_paste", gain = 1}
+			{name = "oil_separation_splat_dug", gain = 1}
 	table.place = table.place or
-			{name = "oil_separation_place_paste", gain = 1}
+			{name = "oil_separation_splat_place", gain = 1}
+	default.node_sound_defaults(table)
+	return table
+end
+
+--NODE SOUND STICKY-- Sounds for oil block
+oil_separation.node_sound_sticky = function(table)
+	table = table or {}
+	table.footstep = table.footstep or
+            {name = "oil_separation_sticky_step", gain = 0.4}
+    table.dig = table.dig or
+			{name = "oil_separation_sticky_dig", gain = 1}
+	table.dug = table.dug or
+			{name = "oil_separation_sticky_dug", gain = 1}
+	table.place = table.place or
+			{name = "oil_separation_sticky_place", gain = 1}
 	default.node_sound_defaults(table)
 	return table
 end
@@ -96,13 +124,13 @@ local function create_oil_source(id_name, def)
         on_construct = def.on_construct or nil,
         on_timer = def.on_timer or nil,
         oil_separation_settings = {
-            oil_source = id_name.."_source",
+            oil_block = id_name.."_block",
         },
         strainer_settings = { --used by "strainer mod"
             output = def.strainer_settings.output or id_name.."_source",
             residual = def.strainer_settings.residual or "air",
-            alt_residual = def.strainer_settings.alternate_residual or nil,
-            do_alt_residual_bool = def.strainer_settings.alternate_residual or nil,
+            alt_residual = def.strainer_settings.alt_residual or nil,
+            do_alt_residual_bool = def.strainer_settings.do_alt_residual_bool or nil,
             strain_time = def.strainer_settings.strain_time or "yellow",
             drip_color = def.strainer_settings.drip_color or 10,
         },
@@ -138,12 +166,31 @@ local function create_oil_flowing(id_name, def)
     })
 end
 
+--CREATING OIL BLOCK-- Function used when registering an oil to create oil block
+local function create_oil_block(id_name, def)
+    minetest.register_node(id_name.."_block", {
+        description = def.description.." Block",
+        tiles = def.oil_block_settings.texture,
+        groups = {crumbly = 3, flammable = 1, oil_block = 1},
+        sounds = oil_separation.node_sound_sticky(),
+        oil_separation_settings = {
+            oil_source = id_name.."_source",
+        },
+    })
+
+    minetest.register_craft({
+	    type = "fuel",
+	    recipe = id_name.."_block",
+	    burntime = 100,
+    })
+end
+
 --OIL REGISTRATION-- Function used to register an oil and its related nodes
 oil_separation.register_oil = function(id_name,def)
     -- Create oil-related nodes
     create_oil_source(id_name,def)
     create_oil_flowing(id_name,def)
-    --create_oil_bottle(id_name,def.bottled)
+    create_oil_block(id_name,def)
     bucket.register_liquid(
         id_name.."_source",        --source name
         id_name.."_flowing",       --flowing name
@@ -177,7 +224,7 @@ minetest.register_node("oil_separation:seed_paste_oily", {
 			},
 		},
 	},
-    groups = {crumbly = 3, falling_node = 1, inert = 1, strainable = 1, flammable = 1},
+    groups = {crumbly = 3, falling_node = 1, strainable = 1, flammable = 1},
     sounds = oil_separation.node_sound_splat(),
     on_construct = function(pos)
         minetest.get_node_timer(pos):start(oil_separation.separation_time)
@@ -188,13 +235,14 @@ minetest.register_node("oil_separation:seed_paste_oily", {
         residual = "oil_separation:seed_paste_dry",
         strain_time = oil_separation.separation_time,
         drip_color = "yellow",
-        alternate_residual = "oil_separation:seed_paste_oily",
-        alternate_bool = function(pos)
+        alt_residual = "oil_separation:seed_paste_oily",
+        do_alt_residual_bool = function(pos)
             local chance = 1/oil_separation.fire_chance --Chance that oil will produce again if near fire
-            if math.random() > chance and is_fire_heating(pos) then
-                return true
+            if math.random() <= chance and oil_separation.is_heated(pos,2) then
+                oil_separation.cool_lava(pos,2)
+                return true --Do alternate
             else
-                return false
+                return false --Do not do alternate
             end
         end,
     },
@@ -273,7 +321,7 @@ oil_separation.register_oil("oil_separation:seed_oil",{
 				type = "vertical_frames",
 				aspect_w = 16,
 				aspect_h = 16,
-				length = 0.8,
+				length = 4,
 			},
 		},
 		{
@@ -283,19 +331,22 @@ oil_separation.register_oil("oil_separation:seed_oil",{
 				type = "vertical_frames",
 				aspect_w = 16,
 				aspect_h = 16,
-				length = 0.8,
+				length = 4,
 			},
 		},
-	},
+    },
     alpha = 160,
     liquid_viscosity = 14,
     liquid_range = 2,
     bucket = "oil_separation_seed_oil_bucket.png",
 	post_effect_color = {a = 50, r = 193, g = 200, b = 0},
-	source_groups = {floats_on_water = 1, liquid = 3, flammable = 3, oil=1, not_in_creative_inventory = 1},
-    flowing_groups = {floats_on_water = 1, liquid = 3, not_in_creative_inventory = 1, oil_flowing = 1},
+	source_groups = {liquid = 3, flammable = 3, oil=1, not_in_creative_inventory = 1},
+    flowing_groups = {liquid = 3, not_in_creative_inventory = 1, oil_flowing = 1},
     strainer_settings = {
         strain_time = 10,
         drip_color = "yellow",
-    }
+    },
+    oil_block_settings= {
+        texture = {name = "oil_separation_seed_oil_block.png"},
+    },
 })

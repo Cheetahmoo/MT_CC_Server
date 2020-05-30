@@ -11,10 +11,10 @@ crop_blight = {} --Establish "crop_blight" name space
 crop_blight.check_interval = 4
 
 --Time a player will be infected after contact with a contaminating node
-crop_blight.player_blighted_time = 60
+crop_blight.player_blighted_time = 50
 
 --How often a player scatters blight while infected
-crop_blight.player_scatter_interval = 10
+crop_blight.player_scatter_interval = 8
 
 --Distance around a player which might be reached by blight when player is infected
 crop_blight.scatter_dist_max = 8 
