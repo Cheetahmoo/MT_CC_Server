@@ -23,7 +23,7 @@ local playerNumber
 
 
 --The time in which the last season switched
-local lastSeasonTime = tonumber(season_storage:get_string("lastSeasonTime")) or 1
+seasons.lastSeasonTime = tonumber(season_storage:get_string("lastSeasonTime")) or 1
 
 --current time of season
 seasons.time = 0
@@ -60,11 +60,11 @@ end
 --
 -- Load Files
 --
-dofile(minetest.get_modpath("seasons").."/nodes.lua")
+--dofile(minetest.get_modpath("seasons").."/nodes.lua")
 dofile(minetest.get_modpath("seasons").."/particles.lua")
 dofile(minetest.get_modpath("seasons").."/functions.lua")
-dofile(minetest.get_modpath("seasons").."/abm.lua")
-
+--dofile(minetest.get_modpath("seasons").."/abm.lua")
+dofile(minetest.get_modpath("seasons").."/new_season_handler.lua")
 --
 -- Season Controler
 --
@@ -88,7 +88,7 @@ function seasons.get_playerTemp(_player_name)
 end
 
 minetest.register_on_shutdown(function()
-	SaveseasonsData(lastSeasonTime, tostring(seasons.season))
+	SaveseasonsData(seasons.lastSeasonTime, tostring(seasons.season))
 end)
 
 local function NextSeason()
@@ -119,18 +119,18 @@ minetest.register_globalstep(function(dtime)
 	end
 	timer = 0
 	if #minetest.get_connected_players() <1 then
-		lastSeasonTime = lastSeasonTime + 5
+		seasons.lastSeasonTime = seasons.lastSeasonTime + 5
 		return
 	end
 	
 	if seasons.time >= seasonsTime then
-		lastSeasonTime = minetest.get_gametime()
+		seasons.lastSeasonTime = minetest.get_gametime()
 		seasons.time = 0
 		NextSeason()
 		return
 	end
 
-	seasons.time = minetest.get_gametime() - lastSeasonTime
+	seasons.time = minetest.get_gametime() - seasons.lastSeasonTime
 	--minetest.chat_send_all(seasons.season .. " has " .. math.floor((seasons.fallTime-(seasons.time/60))+0.5) .. " minutes Left.")
 	
 end)
@@ -148,25 +148,25 @@ minetest.register_chatcommand("season", {
 			return false, "Invalid  Input"
 		elseif param == "spring" then
 			seasons.season = "spring"
-			lastSeasonTime = minetest.get_gametime()
+			seasons.lastSeasonTime = minetest.get_gametime()
 			seasons.time = 0
 			minetest.request_shutdown("Admin is Switching Seasons to ".. seasons.season, core.is_yes(true), 0)
 			return false, "It's now " .. param
 		elseif param == "summer" then
 			seasons.season = "summer"
-			lastSeasonTime = minetest.get_gametime()
+			seasons.lastSeasonTime = minetest.get_gametime()
 			seasons.time = 0
 			minetest.request_shutdown("Admin is Switching Seasons to ".. seasons.season, core.is_yes(true), 0)
 			return false, "It's now " .. param
 		elseif param == "fall" then
 			seasons.season = "fall"
-			lastSeasonTime = minetest.get_gametime()
+			seasons.lastSeasonTime = minetest.get_gametime()
 			seasons.time = 0
 			minetest.request_shutdown("Admin is Switching Seasons to ".. seasons.season, core.is_yes(true), 0)
 			return false, "It's now " .. param
 		elseif param == "winter" then
 			seasons.season = "winter"
-			lastSeasonTime = minetest.get_gametime()
+			seasons.lastSeasonTime = minetest.get_gametime()
 			seasons.time = 0
 			minetest.request_shutdown("Admin is Switching Seasons to ".. seasons.season, core.is_yes(true), 0)
 			return false, "It's now " .. param
