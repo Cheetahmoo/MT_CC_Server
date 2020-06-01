@@ -156,7 +156,7 @@ minetest.register_craft({
 		{"default:stick"},
 	}
 })
-
+--[[ (JGC 5-31-20)
 minetest.register_craft({
 	output = "moreblocks:stone_tile 9",
 	recipe = {
@@ -165,6 +165,17 @@ minetest.register_craft({
 		{"default:cobble", "default:cobble", "default:cobble"},
 	}
 })
+--]]
+
+--EDIT (JGC 5-31-20)
+minetest.register_craft({
+	output = "moreblocks:stone_tile 4",
+	recipe = {
+		{"default:cobble", "default:cobble"},
+		{"default:cobble", "default:cobble"},
+	}
+})
+--End of Edit
 
 minetest.register_craft({
 	output = "moreblocks:split_stone_tile",

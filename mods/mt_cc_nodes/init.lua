@@ -23,6 +23,7 @@ local normal_nodes = {
 			{"mt_cc_nodes:western_stone","mt_cc_nodes:western_stone"},
 			{"mt_cc_nodes:western_stone","mt_cc_nodes:western_stone"},
 		},
+		recipe_output = "mt_cc_nodes:western_stone_block 4"
 	},
 
 	["eastern_stone"] = {
@@ -32,7 +33,7 @@ local normal_nodes = {
 		sounds = default.node_sound_stone_defaults(),
 		--craft
 		recipe_type = "cooking",
-		recipe_recipe = "default:desert_stone",
+		recipe_recipe = "default:stone",
 	},
 
 	["eastern_stone_block"] = {
@@ -46,6 +47,7 @@ local normal_nodes = {
 			{"mt_cc_nodes:eastern_stone","mt_cc_nodes:eastern_stone"},
 			{"mt_cc_nodes:eastern_stone","mt_cc_nodes:eastern_stone"},
 		},
+		recipe_output = "mt_cc_nodes:eastern_stone_block 4"
 	},
 
 	["bark_ball"] = {
@@ -176,3 +178,8 @@ minetest.register_craft({
 		{"mt_cc_nodes:compresed_mese_fragment"},
 	}
 })
+
+-------------------------------------------------------------------
+--                  DO FIEL REGISTRATION
+-------------------------------------------------------------------
+--dofile(minetest.get_modpath("mt_cc_nodes").."/functions.lua")
