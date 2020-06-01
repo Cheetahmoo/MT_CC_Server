@@ -127,10 +127,15 @@ local function create_oil_source(id_name, def)
             oil_block = id_name.."_block",
         },
         strainer_settings = { --used by "strainer mod"
-            output = def.strainer_settings.output or id_name.."_source",
-            residual = def.strainer_settings.residual or "air",
-            alt_residual = def.strainer_settings.alt_residual or nil,
-            do_alt_residual_bool = def.strainer_settings.do_alt_residual_bool or nil,
+            output_residual_func = def.strainer_settings.output_residual_func or 
+                function(node_pos, drop_pos)
+                    local output_residual = {
+                        output = id_name.."_source",
+                        output_pos = drop_pos,
+                        residual = "air",
+                        residual_pos = node_pos}
+                    return output_residual
+                end,
             strain_time = def.strainer_settings.strain_time or "yellow",
             drip_color = def.strainer_settings.drip_color or 10,
         },
@@ -231,20 +236,23 @@ minetest.register_node("oil_separation:seed_paste_oily", {
     end,
     on_timer = seed_paste_oily_on_timer,
     strainer_settings = {
-        output = "oil_separation:seed_oil_source",
-        residual = "oil_separation:seed_paste_dry",
+        output_residual_func = function(node_pos, drop_pos)
+            local res = "oil_separation:seed_paste_dry"
+            local chance = 1/oil_separation.fire_chance --Chance that oil will produce again if near fire
+            if math.random() <= chance and oil_separation.is_heated(node_pos,2) then
+                oil_separation.cool_lava(node_pos,2)
+                res = "oil_separation:seed_paste_oily"
+            end
+
+            local output_residual = {
+                output = "oil_separation:seed_oil_source",
+                output_pos = drop_pos,
+                residual = res,
+                residual_pos = node_pos}
+            return output_residual
+        end,
         strain_time = oil_separation.separation_time,
         drip_color = "yellow",
-        alt_residual = "oil_separation:seed_paste_oily",
-        do_alt_residual_bool = function(pos)
-            local chance = 1/oil_separation.fire_chance --Chance that oil will produce again if near fire
-            if math.random() <= chance and oil_separation.is_heated(pos,2) then
-                oil_separation.cool_lava(pos,2)
-                return true --Do alternate
-            else
-                return false --Do not do alternate
-            end
-        end,
     },
 })
 

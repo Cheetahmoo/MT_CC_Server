@@ -82,51 +82,33 @@ local function active_on_timer(pos)
     if not replaceable_bool(below_pos) then
         return true --Do nothing but restart timer
     end
-
-    --Chose Residual
-    local residual
-    if minetest.registered_nodes[above_node.name].strainer_settings.alt_residual then 
-        --if an alternate residual is listed, run function which determines if alternate should be used
-        if minetest.registered_nodes[above_node.name].strainer_settings.do_alt_residual_bool(above_pos) then
-            residual = minetest.registered_nodes[above_node.name].strainer_settings.alt_residual
-        else
-            residual = minetest.registered_nodes[above_node.name].strainer_settings.residual
-        end
-    else
-        residual = minetest.registered_nodes[above_node.name].strainer_settings.residual
+    
+    --Find the lowest open position to drop stain to
+    local drop_pos = vector.add(find_solid_ground(pos), {x=0, y=1, z=0}) --place on top of solid node
+    
+    --Use function in node registration to determine output, output position, residual, and residual position
+    if not minetest.registered_nodes[above_node.name].strainer_settings.output_residual_func then
+        minetest.log("error", above_node.name.." does not supply output_residual_func()")
     end
-
-    --Chose Output
-    local output
-    if minetest.registered_nodes[above_node.name].strainer_settings.alt_output then 
-        --if an alternate output is listed, run function which determines if alternate should be used
-        if minetest.registered_nodes[above_node.name].strainer_settings.do_alt_output_bool(above_pos) then
-            output = minetest.registered_nodes[above_node.name].strainer_settings.alt_output
-        else
-            output = minetest.registered_nodes[above_node.name].strainer_settings.output
-        end
-    else
-        output = minetest.registered_nodes[above_node.name].strainer_settings.output
-    end
-
+    local out_res = minetest.registered_nodes[above_node.name].strainer_settings.output_residual_func(above_pos, drop_pos)
+    
     --Place residual node or item
-    if minetest.registered_nodes[residual] then
-        minetest.set_node(above_pos,{name = residual})
-    elseif minetest.registered_items[residual] then
-        minetest.remove_node(above_pos)
-        minetest.add_item(above_pos,{name = residual})
+    if minetest.registered_nodes[out_res.residual] then
+        minetest.set_node(out_res.residual_pos,{name = out_res.residual})
+    elseif minetest.registered_items[out_res.residual] then
+        minetest.remove_node(out_res.residual_pos)
+        minetest.add_item(out_res.residual_pos,{name = out_res.residual})
     else
-        minetest.log("error", "node/item name listed in strainer_settings.residual for "..above_node.name.." does not exist")
+        minetest.log("error", "residual node/item returned by strainer_settings.output_residual_func for "..above_node.name.." does not exist")
     end
 
     --Place output node or item
-    local output_pos = vector.add(find_solid_ground(pos), {x=0, y=1, z=0}) --place on top of solid node
-    if minetest.registered_nodes[output] then
-        minetest.set_node(output_pos,{name = output})
-    elseif minetest.registered_items[output] then
-        minetest.add_item(output_pos,{name = output})
+    if minetest.registered_nodes[out_res.output] then
+        minetest.set_node(out_res.output_pos,{name = out_res.output})
+    elseif minetest.registered_items[out_res.output] then
+        minetest.add_item(out_res.output_pos,{name = out_res.output})
     else
-        minetest.log("error", "node/item name listed in strainer_settings.output for "..above_node.name.." does not exist")
+        minetest.log("error", "output node/item returned by strainer_settings.output_residual_func for "..above_node.name.." does not exist")
     end
 
     --Should strainer break?
@@ -296,28 +278,32 @@ strainer.strainable_override = function(name, strainer_settings)
     override_groups["strainable"] = 1
     minetest.override_item(name, {
         groups = override_groups,
-        strainer_settings = strainer_settings, --Four settings required: output, residual, strain_time, and drip_color
+        strainer_settings = strainer_settings, --Three settings required: output_residual_func, strain_time, and drip_color
     })
 end
 
 strainer.strainable_override("default:water_source",{
-    output = "default:water_source", --(REQUIRED)
-    --alt_output = placeholder
-    --do_alt_output_bool = placeholder
-    residual = "air",                --(REQUIRED)
-    --alt_residual = placeholder
-    --do_alt_residual_bool = placeholder
+    output_residual_func = function(node_pos, drop_pos)
+        local output_residual = {
+            output = "default:water_source",
+            output_pos = drop_pos,
+            residual = "air",
+            residual_pos = node_pos}
+        return output_residual       --(REQUIRED) must return {ouput = , output_pos = {}, residual = , residual_pos = {}}
+    end,
     strain_time = 10,                --(REQUIRED)
     drip_color = "blue",             --(REQUIRED)
 })
 
 strainer.strainable_override("default:river_water_source",{
-    output = "default:river_water_source", --(REQUIRED)
-    --alt_output = placeholder
-    --do_alt_output_bool = placeholder
-    residual = "air",                --(REQUIRED)
-    --alt_residual = placeholder
-    --do_alt_residual_bool = placeholder
+    output_residual_func = function(node_pos, drop_pos)
+        local output_residual = {
+            output = "default:river_water_source",
+            output_pos = drop_pos,
+            residual = "air",
+            residual_pos = node_pos}
+        return output_residual
+    end,
     strain_time = 10,                --(REQUIRED)
     drip_color = "blue",             --(REQUIRED)
 })

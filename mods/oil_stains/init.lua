@@ -226,8 +226,15 @@ for i=1, #stains do
         end,
         on_timer = stain_on_timer,
         strainer_settings = {
-            output = "oil_separation:seed_oil_source",
-            residual = "dye:"..stains[i].added_dye,
+            output_residual_func = function(node_pos, drop_pos)
+                local output_residual = {
+                    output = "oil_separation:seed_oil_source",
+                    output_pos = drop_pos,
+                    residual = "dye:"..stains[i].added_dye,
+                    residual_pos = node_pos,
+                }
+                return output_residual
+            end,
             strain_time = 10,
             drip_color = "yellow",
         },
