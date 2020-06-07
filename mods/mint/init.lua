@@ -602,12 +602,10 @@ mint = {
 		end
 		--This Stops players from selling used tools
 		
-		
-		
-
-		
-		local posAbove = {x = pos.x, y = pos.y + 1, z = pos.z}
-		minetest.add_item(posAbove, item)
+		--Drop item infront of chest
+		local dir = minetest.facedir_to_dir(minetest.get_node(pos).param2)
+		local outpos = vector.add(pos, vector.multiply(dir, -1))
+		minetest.add_item(outpos, item)
 		localinv:set_stack("main", itemsold, ItemStack(""))
 
 		-- Remove all coins from the player
@@ -622,7 +620,7 @@ mint = {
 		mint:addcoins(localinv, endlocalcoins)
 		-- Sound ok
 		soundok(pos)
-		print(minetest.pos_to_string(pos))
+		--print(minetest.pos_to_string(pos))
 		-- Register sell
 		mint:registersell(itemsold, (price * found))
 		
@@ -1414,7 +1412,7 @@ minetest.register_node("mint:masm", {
 		end
 		return count
 	end,
-  allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+  	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
 		local meta = minetest.env:get_meta(pos)
 		if player:get_player_name() ~= meta:get_string("owner") then
 			minetest.log("action", player:get_player_name()..
@@ -1425,7 +1423,7 @@ minetest.register_node("mint:masm", {
 		end
 		return stack:get_count()
 	end,
-  allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+  	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.env:get_meta(pos)
 		if player:get_player_name() ~= meta:get_string("owner") then
 			minetest.log("action", player:get_player_name()..
@@ -1440,11 +1438,11 @@ minetest.register_node("mint:masm", {
 		minetest.log("action", player:get_player_name()..
 		" moves stuff in ASM at "..minetest.pos_to_string(pos))
 	end,
-  on_metadata_inventory_put = function(pos, listname, index, stack, player)
+  	on_metadata_inventory_put = function(pos, listname, index, stack, player)
 		minetest.log("action", player:get_player_name()..
 		" moves stuff to ASM at "..minetest.pos_to_string(pos))
 	end,
-  on_metadata_inventory_take = function(pos, listname, index, stack, player)
+  	on_metadata_inventory_take = function(pos, listname, index, stack, player)
 		minetest.log("action", player:get_player_name()..
 		" takes stuff from ASM at "..minetest.pos_to_string(pos))
 	end,
